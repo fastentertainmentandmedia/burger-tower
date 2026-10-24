@@ -20,7 +20,7 @@ export function createRenderer(canvas, callbacks = {}) {
   let scale = 1, offX = 0, offY = 0;
 
   let COLORS = {};
-  let FONT = 'sans-serif';
+  let FONT = 'font-family: Arial, "Helvetica Neue", Helvetica, sans-serif';
 
   const IMG = {};
   (function loadImages() {
@@ -207,27 +207,25 @@ export function createRenderer(canvas, callbacks = {}) {
   function drawGameOver(state, alpha) {
     if (alpha <= 0) return;
 
+    const bandH = 110;
+    const centerY = (cssH / 2 - offY) / scale;   // ← центр canvas в виртуальных px
+
     ctx.save();
     ctx.globalAlpha = alpha;
 
     ctx.fillStyle = COLORS.gameOverOverlay || 'rgba(243,239,232,0.93)';
-    ctx.fillRect(0, VH / 2 - 60, VW, 120);
+    ctx.fillRect(0, centerY - bandH / 2, VW, bandH);
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     const cx = VW / 2;
-    const cy = VH / 2;
 
     ctx.fillStyle = COLORS.gameOverTitle || '#1f1d1a';
     ctx.font = `bold 28px ${FONT}`;
-    ctx.fillText('GAME OVER', cx, cy - 30);
+    ctx.fillText('Хорошая попытка', cx, centerY - 14);
 
-    ctx.fillStyle = COLORS.gameOverText || '#1f1d1a';
-    ctx.font = `bold 18px ${FONT}`;
-    ctx.fillText(`SCORE: ${state.score}`, cx, cy + 5);
-
-    ctx.font = `14px ${FONT}`;
-    ctx.fillText('tap to restart', cx, cy + 32);
+    ctx.font = `16px ${FONT}`;
+    ctx.fillText('нажмите на экран чтобы продолжить', cx, centerY + 20);
 
     ctx.restore();
   }
