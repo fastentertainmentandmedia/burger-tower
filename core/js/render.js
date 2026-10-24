@@ -224,7 +224,7 @@ export function createRenderer(canvas, callbacks = {}) {
     ctx.font = `bold 28px ${FONT}`;
     ctx.fillText('Хорошая попытка', cx, centerY - 14);
 
-    ctx.font = `16px ${FONT}`;
+    ctx.font = `18px ${FONT}`;
     ctx.fillText('нажмите на экран чтобы продолжить', cx, centerY + 20);
 
     ctx.restore();

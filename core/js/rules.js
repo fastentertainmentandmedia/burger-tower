@@ -231,8 +231,8 @@ export function createRules() {
     effects.push({
       type: 'text', x: cx, y: cy - 8, life: 0, duration: 900,
       text: perfectStreak + 1 > 1
-        ? `+${Math.min(1 + perfectStreak, cfg.PERFECT_BONUS_MAX)} PERFECT!`
-        : 'PERFECT!',
+        ? `+${Math.min(1 + perfectStreak, cfg.PERFECT_BONUS_MAX)} ИДЕАЛЬНО!`
+        : 'ИДЕАЛЬНО!',
       color: 'perfectText', stroke: 'perfectStroke',
     });
     effects.push({ type: 'glow', x: cx, y: cy, w, life: 0, duration: 300, color: 'perfectGlow' });
