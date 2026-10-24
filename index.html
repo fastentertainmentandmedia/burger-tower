@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#4a2e1b">
+  <title>Stack Burger Tower</title>
+
+  <link rel="icon" type="image/png" sizes="16x16" href="game/assets/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="game/assets/favicon/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="game/assets/favicon/apple-touch-icon.png">
+
+  <style>
+    html { visibility: hidden; }
+    html.ready { visibility: visible; }
+
+    #preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      background: #ffeac2;
+      color: #4a2e1b;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      text-align: center;
+      visibility: visible;
+    }
+    html.ready #preloader { display: none; }
+    .preloader-logo { width: min(80vw, 320px); height: auto; }
+    .preloader-text { opacity: .7; }
+  </style>
+
+  <link rel="stylesheet" href="core/css/base.css">
+  <link rel="stylesheet" href="core/css/layout.css">
+  <link rel="stylesheet" href="core/css/overlays.css">
+
+  <link rel="stylesheet" href="game/css/theme.css">
+</head>
+<body>
+
+  <div id="preloader">
+    <div class="preloader-text">Загрузка...</div>
+  </div>
+
+  <div class="game-wrapper" id="gameWrapper">
+    <header class="header" id="header">
+      <div class="header-brand" id="headerBrand">
+        <img src="game/assets/logo.svg" alt="Stack Burger Tower" class="header-logo"
+             onerror="this.style.display='none'; this.parentNode.textContent='BURGER TOWER';">
+      </div>
+    </header>
+
+    <div class="canvas-container" id="canvasContainer">
+      <canvas id="gameCanvas" width="360" height="600"></canvas>
+
+      <div class="hud-layer" id="hudLayer" aria-hidden="true">
+        <div class="hud-top">
+          <div class="hud-left">
+            <span class="hud-timer" id="hudTimer">00:00</span>
+          </div>
+          <div class="hud-right">
+            <span class="hud-group">
+              <span class="hud-best-label" id="hudBestLabel">РЕКОРД</span>
+              <span class="hud-best-value" id="hudBestValue">0</span>
+            </span>
+            <span class="hud-group">
+              <span class="hud-score-label" id="hudScoreLabel">СЧЁТ</span>
+              <span class="hud-score-value" id="hudScoreValue">0</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div id="startHint" class="touch-hint" role="status" aria-live="polite">
+        <div class="hint-start">
+          <small>ТАПНИТЕ, ЧТОБЫ УСТАНОВИТЬ СЛОЙ</small>
+        </div>
+        <div class="hint-limit">
+          <div class="hint-limit-title">Время вышло</div>
+          <div class="hint-limit-record">
+            Ваш рекорд: <span id="limitBestScore">0</span>
+          </div>
+          <div class="hint-limit-body">
+            <p>Надеемся, что смогли вас развлечь</p>
+            <p>Ждём вас снова!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="intro-modal hidden" id="introModal" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+    <div class="intro-content">
+      <div class="header-brand">
+        <img src="game/assets/logo.svg" alt="Stack Burger Tower" class="header-logo"
+             onerror="this.style.display='none'; this.parentNode.textContent='BURGER TOWER';">
+      </div>
+
+      <div class="intro-rules">
+        <ul>
+          <li>Блоки движутся влево-вправо.</li>
+          <li>Тапните, чтобы установить блок.</li>
+          <li>Чем точнее попадание — тем шире следующий слой.</li>
+          <li>Идеальное попадание даёт бонус и серию.</li>
+          <li>Промах — бургер разваливается.</li>
+          <li>Наберите максимум очков за <span id="introLimitMinutes">5</span> мин.</li>
+        </ul>
+      </div>
+
+      <div class="intro-cookie">
+        Мы используем файлы cookie. <br>Продолжая, вы соглашаетесь с этим
+      </div>
+
+      <button class="intro-accept" id="introAccept" type="button">Хорошо</button>
+    </div>
+  </div>
+
+  <script type="module" src="core/js/main.js"></script>
+</body>
+</html>

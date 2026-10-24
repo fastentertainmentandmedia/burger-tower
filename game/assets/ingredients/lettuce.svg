@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="50 85 298 28" preserveAspectRatio="none">
+  <!-- Lettuce layer - rectangular profile with rounded corners -->
+  <path d="M52 92
+           Q52 88 56 88
+           L342 88
+           Q346 88 346 92
+           L346 105
+           Q346 109 342 109
+           L56 109
+           Q52 109 52 105
+           Z"
+        fill="#4CAF50" stroke="#2E7D32" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Wavy inner leaf folds to keep the organic feel -->
+  <path d="M52 96 Q80 90 110 96 Q140 102 170 96 Q200 90 230 96 Q260 102 290 96 Q320 90 346 96"
+        fill="none" stroke="#66BB6A" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+        
+  <path d="M52 102 Q80 108 110 102 Q140 96 170 102 Q200 108 230 102 Q260 96 290 102 Q320 108 346 102"
+        fill="none" stroke="#388E3C" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+
+  <!-- Side leaf curl details moved slightly inwards -->
+  <path d="M60 92 Q55 96 60 100 Q55 104 60 105"
+        fill="none" stroke="#2E7D32" stroke-width="1.8" opacity="0.5" stroke-linecap="round"/>
+
+  <path d="M338 92 Q343 96 338 100 Q343 104 338 105"
+        fill="none" stroke="#2E7D32" stroke-width="1.8" opacity="0.5" stroke-linecap="round"/>
+
+  <!-- Top edge detail -->
+  <path d="M56 90 L342 90" fill="none" stroke="#2E7D32" stroke-width="1.5" opacity="0.3" stroke-linecap="round"/>
+
+  <!-- Bottom edge detail -->
+  <path d="M56 107 L342 107" fill="none" stroke="#1B5E20" stroke-width="1.5" opacity="0.35" stroke-linecap="round"/>
+</svg>

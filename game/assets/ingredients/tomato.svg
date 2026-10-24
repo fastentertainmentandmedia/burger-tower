@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="53 76 294 44" preserveAspectRatio="none">
+  <!-- Tomato slice - side view layer -->
+  <path d="M55 100
+           Q55 78 80 78
+           L320 78
+           Q345 78 345 100
+           Q345 118 320 118
+           L80 118
+           Q55 118 55 100
+           Z"
+        fill="#D32F2F" stroke="#B71C1C" stroke-width="2.5"/>
+
+  <!-- Tomato inner flesh -->
+  <path d="M68 100
+           Q68 84 88 84
+           L312 84
+           Q332 84 332 100
+           Q332 112 312 112
+           L88 112
+           Q68 112 68 100
+           Z"
+        fill="#EF5350" stroke="#E53935" stroke-width="1.5"/>
+
+  <!-- Juicy inner core -->
+  <path d="M90 100
+           Q90 90 110 90
+           L290 90
+           Q310 90 310 100
+           Q310 108 290 108
+           L110 108
+           Q90 108 90 100
+           Z"
+        fill="#FF7043" opacity="0.55"/>
+
+
+  <!-- Glossy top highlight -->
+  <path d="M80 86 Q200 80 320 86" fill="none" stroke="#FFAB91" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>
+
+  <!-- Soft specular highlight -->
+  <ellipse cx="130" cy="88" rx="20" ry="3" fill="#FFCCBC" opacity="0.45"/>
+
+  <!-- Bottom shadow edge -->
+  <path d="M80 114 L320 114" fill="none" stroke="#8E0000" stroke-width="1.8" opacity="0.35" stroke-linecap="round"/>
+</svg>
