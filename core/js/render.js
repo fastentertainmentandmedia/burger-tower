@@ -80,6 +80,12 @@ export function createRenderer(canvas, callbacks = {}) {
   }
 
   function drawIngredientAt(x, y, w, h, type) {
+    // Округление до целых пикселей — убирает субпиксельную тряску
+    x = Math.round(x);
+    y = Math.round(y);
+    w = Math.round(w);
+    h = Math.round(h);
+
     const entry = IMG[type];
 
     if (entry && entry.img && entry.ready) {
@@ -97,18 +103,23 @@ export function createRenderer(canvas, callbacks = {}) {
       } else if (spec.fit === 'contain') {
         const s = Math.min(innerW / iw, innerH / ih) * spec.scale;
         dw = iw * s; dh = ih * s;
-      } else { // 'fill' (дефолт)
+      } else { // 'fill'
         dw = innerW * spec.scale;
         dh = innerH * spec.scale;
       }
 
-      // Клип по блоку — чтобы картинка не перекрывала соседей
+      // Тоже округляем позицию и размеры картинки — чтобы drawImage не «мылил»
+      const dx = Math.round(x + (w - dw) / 2);
+      const dy = Math.round(y + (h - dh) / 2);
+      const dW = Math.round(dw);
+      const dH = Math.round(dh);
+
       ctx.save();
       ctx.beginPath();
       ctx.rect(x, y, w, h);
       ctx.clip();
 
-      ctx.drawImage(entry.img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+      ctx.drawImage(entry.img, dx, dy, dW, dH);
 
       ctx.restore();
       return;
