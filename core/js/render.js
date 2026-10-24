@@ -49,7 +49,10 @@ export function createRenderer(canvas, callbacks = {}) {
     cssW = w;
     cssH = h;
     dpr = dprIn || 1;
-    scale = Math.min(cssW / VW, cssH / VH);
+
+    const rawScale = Math.min(cssW / VW, cssH / VH);
+    scale = Math.max(1, Math.round(rawScale * dpr) / dpr);
+
     offX = (cssW - VW * scale) / 2;
     offY = cssH - VH * scale;
     refreshColors();
