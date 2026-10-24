@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="54 87 292 34" preserveAspectRatio="none">
+  <!-- Unified middle bun shape (charcoal style) -->
+  <path d="M62 88
+           Q55 88 55 96
+           L55 112
+           Q55 120 62 120
+           L338 120
+           Q345 120 345 112
+           L345 96
+           Q345 88 338 88
+           Z"
+        fill="#2A2A2A" stroke="#111111" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Integrated side shading -->
+  <path d="M56.5 96
+           L56.5 112
+           Q56.5 118.5 62 118.5
+           L85 118.5
+           Q65 110 70 89.5
+           L62 89.5
+           Q56.5 89.5 56.5 96
+           Z"
+        fill="#000000" opacity="0.35"/>
+        
+  <path d="M343.5 96
+           L343.5 112
+           Q343.5 118.5 338 118.5
+           L315 118.5
+           Q335 110 330 89.5
+           L338 89.5
+           Q343.5 89.5 343.5 96
+           Z"
+        fill="#000000" opacity="0.35"/>
+
+  <!-- Bun top highlight (muted gray) -->
+  <path d="M80 94 Q200 91 320 94" fill="none" stroke="#555555" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+
+  <!-- Soft specular highlight -->
+  <ellipse cx="140" cy="96" rx="22" ry="3" fill="#888888" opacity="0.2"/>
+
+  <!-- Bottom shadow edge -->
+  <path d="M80 114 Q200 117 320 114" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.5" stroke-linecap="round"/>
+  
+  <!-- Bran flecks / multigrain texture (darker gray) -->
+  <g fill="#555555" opacity="0.7">
+    <rect x="105" y="102" width="3" height="1.5" rx="0.5" transform="rotate(15 105 102)"/>
+    <rect x="140" y="108" width="4" height="1.5" rx="0.5" transform="rotate(-20 140 108)"/>
+    <rect x="175" y="98" width="3" height="1.5" rx="0.5" transform="rotate(30 175 98)"/>
+    <rect x="215" y="105" width="4" height="1.5" rx="0.5" transform="rotate(-10 215 105)"/>
+    <rect x="255" y="100" width="3" height="1.5" rx="0.5" transform="rotate(25 255 100)"/>
+    <rect x="290" y="112" width="4" height="1.5" rx="0.5" transform="rotate(-15 290 112)"/>
+    
+    <circle cx="120" cy="115" r="1.2"/>
+    <circle cx="155" cy="102" r="1.5"/>
+    <circle cx="190" cy="112" r="1.2"/>
+    <circle cx="230" cy="99" r="1.5"/>
+    <circle cx="270" cy="116" r="1.2"/>
+    <circle cx="310" cy="104" r="1.5"/>
+    <circle cx="130" cy="95" r="1.2"/>
+    <circle cx="210" cy="94" r="1.5"/>
+    <circle cx="280" cy="105" r="1.2"/>
+  </g>
+
+  <!-- Lighter flecks for depth (soft silver/gray) -->
+  <g fill="#888888" opacity="0.4">
+    <circle cx="115" cy="105" r="1"/>
+    <circle cx="165" cy="112" r="1.2"/>
+    <circle cx="205" cy="102" r="1"/>
+    <circle cx="245" cy="110" r="1.2"/>
+    <circle cx="285" cy="98" r="1"/>
+    <circle cx="320" cy="115" r="1"/>
+  </g>
+</svg>

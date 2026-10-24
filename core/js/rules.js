@@ -1,17 +1,28 @@
 // ============================================================
 // [FILE: core/js/rules.js]
 // Механика stacker. Читает типы блоков и параметры из gameConfig.
+// Поддержка BASE_TYPES + BASE_TOP_PAIRS (extra-bun) + SPAWN_ANTI_REPEAT.
 // ============================================================
 
 import { gameConfig as cfg } from '../../game/js/config.js';
 
+// ----------------------------------------------------------
+// Base-типы (основания): случайно выбирается один на партию.
+// Extra-bun: привязаны к base через BASE_TOP_PAIRS.
+// Обычные ингредиенты: все, кто не base и не extra-bun.
+// ----------------------------------------------------------
 const BASE_TYPES = Array.isArray(cfg.BASE_TYPES)
   ? cfg.BASE_TYPES
   : (cfg.BASE_TYPE ? [cfg.BASE_TYPE] : ['bun']);
 
 const BASE_TYPE_SET = new Set(BASE_TYPES);
 
-const TYPE_IDS = Object.keys(cfg.BLOCK_TYPES).filter(id => !BASE_TYPE_SET.has(id));
+const BASE_TOP_PAIRS = cfg.BASE_TOP_PAIRS || {};
+const BASE_TOP_SET   = new Set(Object.values(BASE_TOP_PAIRS));
+
+const TYPE_IDS = Object.keys(cfg.BLOCK_TYPES).filter(
+  id => !BASE_TYPE_SET.has(id) && !BASE_TOP_SET.has(id)
+);
 
 function pickBaseType() {
   return BASE_TYPES[Math.floor(Math.random() * BASE_TYPES.length)];
@@ -41,16 +52,6 @@ const CRUMBLE = { ...CRUMBLE_DEFAULTS, ...(cfg.CRUMBLE || {}) };
 
 function rand(min, max) { return min + Math.random() * (max - min); }
 
-function pickWeightedType() {
-  const pool = [];
-  for (const id of TYPE_IDS) {
-    const w = cfg.BLOCK_TYPES[id].weight || 0;
-    for (let i = 0; i < w; i++) pool.push(id);
-  }
-  if (pool.length === 0) return TYPE_IDS[0];
-  return pool[Math.floor(Math.random() * pool.length)];
-}
-
 function heightOf(type) {
   return cfg.BLOCK_TYPES[type]?.height ?? 24;
 }
@@ -75,10 +76,48 @@ export function createRules() {
   let crumbleStart = 0;
   let nowMs = 0;
 
+  // Base + extra-bun текущей партии
+  let chosenBaseType = null;
+  let chosenTopType  = null;
+
+  // Антиповтор
+  let lastSpawnedType = null;
+  let recentSpawns = [];
+
   function blockTopY(index) {
     let y = VH - cfg.PLATE_Y_OFFSET;
     for (let i = 0; i < index; i++) y -= heightOf(blocks[i].type);
     return y + cameraOffset;
+  }
+
+  // ----------------------------------------------------------
+  // Выбор типа для обычного спавна (с антиповтором)
+  // ----------------------------------------------------------
+  function pushRecent(type) {
+    const n = cfg.SPAWN_ANTI_REPEAT || 0;
+    if (n <= 0) return;
+    recentSpawns.push(type);
+    while (recentSpawns.length > n) recentSpawns.shift();
+  }
+
+  function pickTypeAvoidingRecent() {
+    const banned = new Set(recentSpawns);
+    const pool = [];
+    for (const id of TYPE_IDS) {
+      if (banned.has(id)) continue;
+      const w = cfg.BLOCK_TYPES[id].weight || 0;
+      for (let i = 0; i < w; i++) pool.push(id);
+    }
+    if (pool.length === 0) {
+      // fallback: игнорируем антиповтор
+      const all = [];
+      for (const id of TYPE_IDS) {
+        const w = cfg.BLOCK_TYPES[id].weight || 0;
+        for (let i = 0; i < w; i++) all.push(id);
+      }
+      return all.length ? all[Math.floor(Math.random() * all.length)] : TYPE_IDS[0];
+    }
+    return pool[Math.floor(Math.random() * pool.length)];
   }
 
   function spawnNewBlock() {
@@ -88,11 +127,30 @@ export function createRules() {
     const fromLeft = Math.random() < 0.5;
     const x = fromLeft ? -w : VW;
     direction = fromLeft ? 1 : -1;
-    current = { x, width: w, type: pickWeightedType() };
+
+    let type;
+    const canTop = chosenTopType
+      && lastSpawnedType !== chosenTopType
+      && Math.random() < (cfg.BUN_CHANCE || 0);
+
+    if (canTop) {
+      type = chosenTopType;
+    } else {
+      type = pickTypeAvoidingRecent();
+    }
+
+    lastSpawnedType = type;
+    if (type !== chosenTopType) {
+      pushRecent(type);
+    }
+
+    current = { x, width: w, type };
   }
 
+  // ----------------------------------------------------------
+  // Куски
+  // ----------------------------------------------------------
   function spawnPiece(x, y, w, h, type, side, opts = {}) {
-    // Один кусок = один блок (для обычных «отрезанных» кусков).
     fallingPieces.push({
       x, y, w, h, type,
       vx: side * rand(CRUMBLE.VX_MIN, CRUMBLE.VX_MAX) + (Math.random() - 0.5) * 1.5,
@@ -267,7 +325,7 @@ export function createRules() {
       p.y += p.vy;
       p.rot += p.vr;
 
-      if (p.y > VH + 20) { fallingPieces.splice(i, 1); continue; }
+      if (p.y > VH + 200) { fallingPieces.splice(i, 1); continue; }
       if (p.y > p.fadeAt) {
         p.alpha = Math.max(0, (p.fadeAt + p.fadeSpan - p.y) / p.fadeSpan);
         if (p.alpha <= 0) fallingPieces.splice(i, 1);
@@ -326,11 +384,16 @@ export function createRules() {
   }
 
   function reset() {
+    chosenBaseType = pickBaseType();
+    chosenTopType  = BASE_TOP_PAIRS[chosenBaseType] || null;
+    lastSpawnedType = null;
+    recentSpawns = [];
+
     blocks = [{
       x: (VW - cfg.BASE_BLOCK_WIDTH) / 2,
       width: cfg.BASE_BLOCK_WIDTH,
-      type: pickBaseType(),
-  }];
+      type: chosenBaseType,
+    }];
     fallingPieces = [];
     effects = [];
     cameraOffset = 0;
@@ -362,14 +425,19 @@ export function createRules() {
       crumbleStart,
       crumbleDelayMs: CRUMBLE.OVERLAY_DELAY_MS,
       nowMs,
+      chosenBaseType,
+      chosenTopType,
     };
   }
 
+  // Инициализация модуля
+  chosenBaseType = pickBaseType();
+  chosenTopType  = BASE_TOP_PAIRS[chosenBaseType] || null;
   blocks = [{
     x: (VW - cfg.BASE_BLOCK_WIDTH) / 2,
     width: cfg.BASE_BLOCK_WIDTH,
-    type: pickBaseType(),
-}];
+    type: chosenBaseType,
+  }];
   spawnNewBlock();
 
   return {

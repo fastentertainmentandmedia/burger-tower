@@ -1,23 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="43 79 304 38" preserveAspectRatio="none">
-  <!-- Bottom/Back Strip - flattened rectangular profile -->
-  <path d="M48 91
-           L342 91
-           Q346 91 346 95
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="43 79 304 32" preserveAspectRatio="none">
+  <!-- Single wide bacon strip -->
+  <path d="M48 82
+           L342 82
+           Q346 82 346 86
            L346 106
            Q346 110 342 110
            L48 110
            Q44 110 44 106
-           L44 95
-           Q44 91 48 91 Z" 
-        fill="#D94848" stroke="#A52A2A" stroke-width="2.5" stroke-linejoin="round"/>
+           L44 86
+           Q44 82 48 82 Z" 
+        fill="#E55050" stroke="#A52A2A" stroke-width="2.5" stroke-linejoin="round"/>
         
-  <!-- Back Strip Internal Waves -->
-  <path d="M44 96
-           C70 88 90 104 110 96
-           C130 88 150 104 170 96
-           C190 88 210 104 230 96
-           C250 88 270 104 290 96
-           C310 88 330 104 346 96
+  <!-- Internal fat band (meat on top and bottom) -->
+  <path d="M44 88
+           C70 80 90 96 110 88
+           C130 80 150 96 170 88
+           C190 80 210 96 230 88
+           C250 80 270 96 290 88
+           C310 80 330 96 346 88
            L346 99
            C330 107 310 91 290 99
            C270 107 250 91 230 99
@@ -25,68 +25,5 @@
            C150 107 130 91 110 99
            C90 107 70 91 44 99
            Z" 
-        fill="#F2A391" />
-        
-  <path d="M44 102
-           C70 94 90 110 110 102
-           C130 94 150 110 170 102
-           C190 94 210 110 230 102
-           C250 94 270 110 290 102
-           C310 94 330 110 346 102
-           L346 106
-           Q346 110 342 110
-           L48 110
-           Q44 110 44 106
-           Z" 
         fill="#FCD4A6" />
-
-  <!-- Top/Front Strip - flattened rectangular profile -->
-  <path d="M48 82
-           L342 82
-           Q346 82 346 86
-           L346 97
-           Q346 101 342 101
-           L48 101
-           Q44 101 44 97
-           L44 86
-           Q44 82 48 82 Z" 
-        fill="#E55050" stroke="#A52A2A" stroke-width="2.5" stroke-linejoin="round"/>
-        
-  <!-- Front Strip Internal Waves -->
-  <path d="M44 87
-           C70 79 90 95 110 87
-           C130 79 150 95 170 87
-           C190 79 210 95 230 87
-           C250 79 270 95 290 87
-           C310 79 330 95 346 87
-           L346 90
-           C330 98 310 82 290 90
-           C270 98 250 82 230 90
-           C210 98 190 82 170 90
-           C150 98 130 82 110 90
-           C90 98 70 82 44 90
-           Z" 
-        fill="#F4A79B" />
-        
-  <path d="M44 93
-           C70 85 90 101 110 93
-           C130 85 150 101 170 93
-           C190 85 210 101 230 93
-           C250 85 270 101 290 93
-           C310 85 330 101 346 93
-           L346 97
-           Q346 101 342 101
-           L48 101
-           Q44 101 44 97
-           Z" 
-        fill="#FCD9AD" />
-
-  <!-- Crisp White Highlights -->
-  <g fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" opacity="0.8">
-    <path d="M60 85 C75 79 85 90 95 89" />
-    <path d="M120 85 C135 79 145 90 155 89" />
-    <path d="M210 85 C225 79 235 90 245 89" />
-    <path d="M70 89 C85 83 95 94 105 93" />
-    <path d="M160 89 C175 83 185 94 195 93" />
-  </g>
 </svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="59 84 282 42" preserveAspectRatio="none">
+  <!-- Middle bun in the classic golden style -->
+  <path d="M60 95
+           Q60 85 80 85
+           L320 85
+           Q340 85 340 95
+           L340 115
+           Q340 125 320 125
+           L80 125
+           Q60 125 60 115
+           Z"
+        fill="#D4953A" stroke="#B87830" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Bun top highlight -->
+  <path d="M90 95 Q200 88 310 95"
+        fill="none" stroke="#E8B05A" stroke-width="3" opacity="0.55" stroke-linecap="round"/>
+
+  <!-- Soft specular highlight -->
+  <ellipse cx="140" cy="96" rx="22" ry="4" fill="#F5DEB3" opacity="0.35"/>
+
+  <!-- Bottom shadow edge -->
+  <path d="M90 115 L310 115" fill="none" stroke="#8D5A1E" stroke-width="1.8" opacity="0.35" stroke-linecap="round"/>
+</svg>
