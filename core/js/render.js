@@ -51,7 +51,7 @@ export function createRenderer(canvas, callbacks = {}) {
     dpr = dprIn || 1;
     scale = Math.min(cssW / VW, cssH / VH);
     offX = (cssW - VW * scale) / 2;
-    offY = (cssH - VH * scale) / 2;
+    offY = cssH - VH * scale;
     refreshColors();
     onImageReady();
   }
