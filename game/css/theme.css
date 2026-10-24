@@ -6,7 +6,7 @@
 :root {
   --header-h: 44px;
   --gap-sm: 12px;
-  --field-aspect: 0.7222;   
+  --field-aspect: 0.7222;
 
   --color-field-bg:      #fdf8ed;
   --color-field-bg-top:  #fef5e3;
@@ -41,7 +41,7 @@
   --radius-lg:   20px;
   --radius-pill: 40px;
 
-  --font-mono: 'Segoe UI', 'Arial', system-ui, sans-serif;
+  --font-mono: 'Arial', 'Helvetica Neue', 'Helvetica', 'sans-serif';
 
   --hud-top-h:    0.08;
   --hud-padding:  0.03;
@@ -68,6 +68,9 @@ body {
 
 canvas { background-color: var(--color-field-bg); }
 
+/* ============================================================
+   [BLOCK: hud]
+   ============================================================ */
 .hud-layer {
   font-family: var(--font-mono);
   color: var(--color-text-accent);
@@ -80,10 +83,10 @@ canvas { background-color: var(--color-field-bg); }
   color: var(--color-timer-normal);
   transition: color .2s, font-size .2s, opacity .2s;
 }
-.hud-timer.is-warning  { font-size: 1.05em; color: var(--color-timer-warning); }
-.hud-timer.is-danger   { font-size: 1.10em; color: var(--color-timer-danger); }
+.hud-timer.is-warning  { font-size: 1.40em; color: var(--color-timer-warning); }
+.hud-timer.is-danger   { font-size: 1.45em; color: var(--color-timer-danger); }
 .hud-timer.is-critical {
-  font-size: 1.20em;
+  font-size: 1.55em;
   color: var(--color-timer-danger);
   animation: hud-timer-pulse 1s ease-in-out infinite;
 }
@@ -105,10 +108,13 @@ canvas { background-color: var(--color-field-bg); }
   color: var(--color-text-accent);
 }
 
+/* ============================================================
+   [BLOCK: touch-hint — базовый]
+   ============================================================ */
 .touch-hint {
   background-color: rgba(255,234,194,0.96);
   color: var(--color-text-warm);
-  border: 3px solid #e6a448;
+  border: 2px solid #e6a448;
   border-radius: var(--radius-md);
   font-family: var(--font-mono);
   font-size: clamp(18px, 5vw, 28px);
@@ -124,12 +130,9 @@ canvas { background-color: var(--color-field-bg); }
   color: var(--color-text-dim);
 }
 
-body[data-hint="limit"] .touch-hint {
-  background-color: rgba(255,234,194,0.97);
-  border: 3px solid var(--color-warning);
-  color: var(--color-text-main);
-}
-
+/* ============================================================
+   [BLOCK: intro]
+   ============================================================ */
 .intro-modal { background-color: rgba(201,154,91,0.85); }
 .intro-content {
   background-image: linear-gradient(135deg, #ffeac2 0%, #f5d79e 100%);
@@ -176,4 +179,62 @@ body[data-hint="limit"] .touch-hint {
   background-color: #f0b45e;
   box-shadow: 0 1px 0 #a56e2e, 0 3px 8px rgba(0,0,0,.3);
   transform: translateY(3px);
+}
+
+/* ============================================================
+   [BLOCK: hint-limit]
+   ============================================================ */
+body[data-hint="limit"] .touch-hint {
+  background-color: rgba(251, 248, 240, 0.97);
+
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-lg);
+
+  color: var(--color-text-main);
+
+  box-shadow:
+    0 0 40px rgba(232, 161, 122, 0.35),
+    0 0 80px rgba(154, 160, 166, 0.2),
+    inset 0 0 30px rgba(255, 255, 255, 0.6);
+}
+
+body[data-hint="limit"] .hint-limit-title {
+  font-family: var(--font-mono);
+  font-size: clamp(20px, 5vw, 28px);
+  font-weight: 900;
+  letter-spacing: .5px;
+
+  color: var(--color-text-warm);
+  text-shadow: 0 1px 0 #ffffff;
+
+  margin-bottom: 2px;
+}
+
+body[data-hint="limit"] .hint-limit-record {
+  font-family: var(--font-mono);
+  font-size: clamp(18px, 3.4vw, 20px);
+
+  color: var(--color-text-dim);
+  letter-spacing: 0.5px;
+
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(139, 111, 58, 0.25);
+}
+
+body[data-hint="limit"] #limitBestScore {
+  font-size: 1.3em;
+  font-weight: 900;
+  color: var(--color-text-dim);
+  margin-left: 4px;
+}
+
+body[data-hint="limit"] .hint-limit-body {
+  font-family: var(--font-mono);
+  font-size: clamp(14px, 2.8vw, 18px);
+  font-weight: 500;
+
+  color: var(--color-text-dim);
+  letter-spacing: 0.5px;
+  text-align: center;
 }
