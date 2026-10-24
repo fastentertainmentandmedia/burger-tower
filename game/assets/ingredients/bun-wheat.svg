@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="58 83 284 44" preserveAspectRatio="none">
+  <!-- Bottom bun (multigrain / bran style) - flat base with rounded edges -->
+  <path d="M60 95
+           Q60 85 80 85
+           L320 85
+           Q340 85 340 95
+           Q340 120 310 125
+           L90 125
+           Q60 120 60 95
+           Z"
+        fill="#C29858" stroke="#8B5E3C" stroke-width="2.5"/>
+
+  <!-- Bun top highlight -->
+  <path d="M90 95 Q200 88 310 95"
+        fill="none" stroke="#E0BA7A" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+
+  <!-- Soft specular highlight -->
+  <ellipse cx="140" cy="96" rx="22" ry="4" fill="#F5DEB3" opacity="0.3"/>
+
+  <!-- Bottom shadow edge -->
+  <path d="M90 120 L310 120" fill="none" stroke="#6B4226" stroke-width="1.8" opacity="0.4" stroke-linecap="round"/>
+  
+  <!-- Bran flecks / multigrain texture -->
+  <g fill="#7A4C2E" opacity="0.6">
+    <!-- Larger bran pieces -->
+    <rect x="105" y="100" width="3" height="1.5" rx="0.5" transform="rotate(15 105 100)"/>
+    <rect x="140" y="108" width="4" height="1.5" rx="0.5" transform="rotate(-20 140 108)"/>
+    <rect x="175" y="95" width="3" height="1.5" rx="0.5" transform="rotate(30 175 95)"/>
+    <rect x="215" y="105" width="4" height="1.5" rx="0.5" transform="rotate(-10 215 105)"/>
+    <rect x="255" y="98" width="3" height="1.5" rx="0.5" transform="rotate(25 255 98)"/>
+    <rect x="290" y="112" width="4" height="1.5" rx="0.5" transform="rotate(-15 290 112)"/>
+    <!-- Small flecks -->
+    <circle cx="120" cy="115" r="1.2"/>
+    <circle cx="155" cy="100" r="1.5"/>
+    <circle cx="190" cy="112" r="1.2"/>
+    <circle cx="230" cy="98" r="1.5"/>
+    <circle cx="270" cy="116" r="1.2"/>
+    <circle cx="310" cy="104" r="1.5"/>
+    <circle cx="130" cy="93" r="1.2"/>
+    <circle cx="210" cy="92" r="1.5"/>
+    <circle cx="280" cy="105" r="1.2"/>
+  </g>
+
+  <!-- Lighter flecks for depth -->
+  <g fill="#EAD4A8" opacity="0.5">
+    <circle cx="115" cy="105" r="1"/>
+    <circle cx="165" cy="115" r="1.2"/>
+    <circle cx="205" cy="100" r="1"/>
+    <circle cx="245" cy="110" r="1.2"/>
+    <circle cx="285" cy="95" r="1"/>
+    <circle cx="320" cy="115" r="1"/>
+  </g>
+</svg>

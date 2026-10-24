@@ -5,7 +5,17 @@
 
 import { gameConfig as cfg } from '../../game/js/config.js';
 
-const TYPE_IDS = Object.keys(cfg.BLOCK_TYPES).filter(id => id !== cfg.BASE_TYPE);
+const BASE_TYPES = Array.isArray(cfg.BASE_TYPES)
+  ? cfg.BASE_TYPES
+  : (cfg.BASE_TYPE ? [cfg.BASE_TYPE] : ['bun']);
+
+const BASE_TYPE_SET = new Set(BASE_TYPES);
+
+const TYPE_IDS = Object.keys(cfg.BLOCK_TYPES).filter(id => !BASE_TYPE_SET.has(id));
+
+function pickBaseType() {
+  return BASE_TYPES[Math.floor(Math.random() * BASE_TYPES.length)];
+}
 
 // ----------------------------------------------------------
 // Дефолты для CRUMBLE (если клиент не задал)
@@ -316,7 +326,11 @@ export function createRules() {
   }
 
   function reset() {
-    blocks = [{ x: (VW - cfg.BASE_BLOCK_WIDTH) / 2, width: cfg.BASE_BLOCK_WIDTH, type: cfg.BASE_TYPE }];
+    blocks = [{
+      x: (VW - cfg.BASE_BLOCK_WIDTH) / 2,
+      width: cfg.BASE_BLOCK_WIDTH,
+      type: pickBaseType(),
+  }];
     fallingPieces = [];
     effects = [];
     cameraOffset = 0;
@@ -351,7 +365,11 @@ export function createRules() {
     };
   }
 
-  blocks = [{ x: (VW - cfg.BASE_BLOCK_WIDTH) / 2, width: cfg.BASE_BLOCK_WIDTH, type: cfg.BASE_TYPE }];
+  blocks = [{
+    x: (VW - cfg.BASE_BLOCK_WIDTH) / 2,
+    width: cfg.BASE_BLOCK_WIDTH,
+    type: pickBaseType(),
+}];
   spawnNewBlock();
 
   return {

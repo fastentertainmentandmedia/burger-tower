@@ -36,7 +36,9 @@ export const gameConfig = {
   PERFECT_BONUS_MAX: 5,
   SCORE_PER_BLOCK:   1,
 
-  BASE_TYPE: 'bun',
+  // Массив base-типов. При каждой новой игре случайно выбирается один.
+// Если хотите фиксированный — оставьте массив из одного элемента.
+  BASE_TYPES: ['bun', 'bunblack', 'bunwheat'],
 
   // ----------------------------------------------------------
   // Вписывание картинок в блок.
@@ -112,6 +114,18 @@ export const gameConfig = {
     },
     bun: {
       src: 'game/assets/ingredients/bun.svg',
+      height: 55, weight: 0,
+      fallback: { color: '#d99e4a', border: '#8b5a2b' },
+    },
+
+    bunblack: {
+      src: 'game/assets/ingredients/bun-black.svg',
+      height: 55, weight: 0,
+      fallback: { color: '#d99e4a', border: '#8b5a2b' },
+    },
+
+    bunwheat: {
+      src: 'game/assets/ingredients/bun-wheat.svg',
       height: 55, weight: 0,
       fallback: { color: '#d99e4a', border: '#8b5a2b' },
     },
