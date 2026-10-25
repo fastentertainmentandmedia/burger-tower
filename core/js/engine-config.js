@@ -4,7 +4,7 @@
 // ============================================================
 
 export const engineConfig = {
-  MAX_DPR: 2,
+  MAX_DPR: 1.5, //2
   FIELD_ASPECT: 0.6,
 
   HUD_TOP_H_RATIO:   0.09,

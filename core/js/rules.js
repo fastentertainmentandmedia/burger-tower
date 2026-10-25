@@ -407,7 +407,7 @@ export function createRules() {
 
   function tick(rawDt) {
     // Жёсткое ограничение: пропуск кадров не даёт «прыжка»
-    const dt = Math.min(rawDt, 20);
+    const dt = Math.min(rawDt, 33.33); //20
     nowMs += dt;
 
     if (current && !over) {
