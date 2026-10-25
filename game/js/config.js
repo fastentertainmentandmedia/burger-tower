@@ -8,7 +8,7 @@ import { roundRectPath } from '../../core/js/drawers.js';
 
 export const gameConfig = {
   STORAGE_KEY: 'stack_burger',
-  PLAY_LIMIT_MINUTES: 3,
+  PLAY_LIMIT_MINUTES: 4,
   LIMIT_RESET_HOURS: 4,
 
   ASSETS: {
@@ -56,7 +56,7 @@ export const gameConfig = {
   // ----------------------------------------------------------
   // Картинки
   // ----------------------------------------------------------
-  INGREDIENT_FIT:         'fill',
+  INGREDIENT_FIT:         'fill', //contain'/'cover'
   INGREDIENT_FIT_SCALE:   1.0,
   INGREDIENT_FIT_PADDING: 0,
   INGREDIENT_FIT_OVERRIDES: {},
@@ -85,12 +85,12 @@ export const gameConfig = {
   BLOCK_TYPES: {
     lettuce: {
       src: 'game/assets/ingredients/lettuce.svg',
-      height: 0.045, weight: 2,
+      height: 0.041, weight: 2,
       fallback: { color: '#6cb52b', border: '#3a6e12' },
     },
     patty: {
       src: 'game/assets/ingredients/patty.svg',
-      height: 0.055, weight: 3,
+      height: 0.051, weight: 3,
       fallback: { color: '#6e3b1f', border: '#2e1508' },
     },
     cheese: {
@@ -110,7 +110,7 @@ export const gameConfig = {
     },
     bacon: {
       src: 'game/assets/ingredients/bacon.svg',
-      height: 0.035, weight: 2,
+      height: 0.036, weight: 2,
       fallback: { color: '#a83222', border: '#5a1208' },
     },
     onion: {
