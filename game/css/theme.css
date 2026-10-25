@@ -41,7 +41,7 @@
   --radius-lg:   20px;
   --radius-pill: 40px;
 
-  --font-mono: 'Arial', 'Helvetica Neue', 'Helvetica', 'sans-serif';
+  --font-mono: 'Inter', 'Arial', 'Helvetica Neue', 'Helvetica', sans-serif;
 
   --hud-top-h:    0.08;
   --hud-padding:  0.03;
@@ -74,6 +74,9 @@ canvas { background-color: var(--color-field-bg); }
 .hud-layer {
   font-family: var(--font-mono);
   color: var(--color-text-accent);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
 }
 
 .hud-timer {
@@ -97,14 +100,14 @@ canvas { background-color: var(--color-field-bg); }
 
 .hud-best-label, .hud-score-label {
   font-size: 1.15em;
-  font-weight: 700;
+  font-weight: 900;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--color-text-dim);
 }
 .hud-best-value, .hud-score-value {
   font-size: 1.15em;
-  font-weight: 700;
+  font-weight: 900;
   color: var(--color-text-accent);
 }
 
