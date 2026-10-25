@@ -62,7 +62,7 @@ export function createRenderer(canvas, callbacks = {}) {
     refreshColors();
     onImageReady();
 
-    ctx.imageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = true;
   }
 
   function applyTransform() {
