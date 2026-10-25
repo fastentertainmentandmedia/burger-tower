@@ -17,7 +17,8 @@ export function createRenderer(canvas, callbacks = {}) {
   const VH = cfg.VIRTUAL_H;
 
   let cssW = VW, cssH = VH, dpr = 1;
-  let scale = 1, offX = 0, offY = 0;
+  let scalePx = 1, offXPx = 0, offYPx = 0;
+  let scale = 1;   // виртуальный (если где-то ещё используется)
 
   let COLORS = {};
   let FONT = 'font-family: Arial, "Helvetica Neue", Helvetica, sans-serif';
@@ -51,22 +52,21 @@ export function createRenderer(canvas, callbacks = {}) {
     dpr = dprIn || 1;
 
     const rawScale = Math.min(cssW / VW, cssH / VH);
-    scale = Math.max(1, Math.round(rawScale * dpr) / dpr);
 
-    const offXPx = Math.round((cssW - VW * scale) / 2 * dpr);
-    const offYPx = Math.round((cssH - VH * scale) * dpr);
+    scalePx = Math.max(1, Math.round(rawScale * dpr));
+    scale   = scalePx / dpr;   // если нужно где-то в виртуальных px
 
-    offX = offXPx / dpr;
-    offY = offYPx / dpr;
+    offXPx = Math.round((cssW * dpr - VW * scalePx) / 2);
+    offYPx = Math.round(cssH * dpr - VH * scalePx);
 
     refreshColors();
     onImageReady();
 
-    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingEnabled = false;
   }
 
   function applyTransform() {
-    ctx.setTransform(dpr * scale, 0, 0, dpr * scale, dpr * offX, dpr * offY);
+    ctx.setTransform(scalePx, 0, 0, scalePx, offXPx, offYPx);
   }
 
   // ----------------------------------------------------------
