@@ -135,7 +135,7 @@ export function createRenderer(canvas, callbacks = {}) {
         y -= heightOf(state.blocks[k].type);
       }
       const h = heightOf(b.type);
-      drawIngredientAt(b.x, y - h + state.cameraOffset, b.width, h, b.type);
+      drawIngredientAt(Math.round(b.x), Math.round(y - h + state.cameraOffset), Math.round(b.width), Math.round(h), b.type);
     }
 
     if (!state.over && state.current) {
@@ -144,7 +144,13 @@ export function createRenderer(canvas, callbacks = {}) {
         y -= heightOf(state.blocks[k].type);
       }
       const h = heightOf(state.current.type);
-      drawIngredientAt(state.current.x, y - h + state.cameraOffset, state.current.width, h, state.current.type);
+      drawIngredientAt(
+        Math.round(state.current.x),
+        Math.round(y - h + state.cameraOffset),
+        Math.round(state.current.width),
+        Math.round(h),
+        state.current.type
+      );
     }
   }
 
