@@ -24,6 +24,7 @@ const $ = createDOM({
   introModal:        'introModal',
   introAccept:       'introAccept',
   limitBestScore:    'limitBestScore',
+  limitBestStreak:   'limitBestStreak',
   introLimitMinutes: 'introLimitMinutes',
   hudLayer:          'hudLayer',
   hudTimer:          'hudTimer',
@@ -80,9 +81,10 @@ const game = createLoop({
       }
     },
     onPerfect: (snap) => {
-      console.log('onPerfect', snap?.perfectStreak);
-      trackGoal('perfect_hit', { streak: snap?.perfectStreak ?? 0 });
-      syncState({ perfectStreak: snap?.perfectStreak ?? 0 });
+      const streak = snap?.perfectStreak ?? 0;
+      trackGoal('perfect_hit', { streak });
+      limits.updateBestStreak(streak);
+      syncState({ perfectStreak: streak });
     },
     onStart: () => {
       gamesThisSession++;

@@ -8,7 +8,7 @@ import { roundRectPath } from '../../core/js/drawers.js';
 
 export const gameConfig = {
   STORAGE_KEY: 'stack_burger',
-  PLAY_LIMIT_MINUTES: 5,
+  PLAY_LIMIT_MINUTES: 1,
   LIMIT_RESET_HOURS: 4,
 
   ASSETS: {
@@ -167,4 +167,4 @@ export const gameConfig = {
   },
 };
 
-export const DEBUG_DISABLE_LIMIT = true;
+export const DEBUG_DISABLE_LIMIT = false;

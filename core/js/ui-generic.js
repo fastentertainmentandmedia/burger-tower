@@ -37,6 +37,10 @@ export function createUI({ $, limits, fields = [], timer = null, hints = true })
     if ($.limitBestScore && limits) {
       $.limitBestScore.textContent = limits.getBestScore();
     }
+
+    if ($.limitBestStreak && limits) {
+      $.limitBestStreak.textContent = 'x' + limits.getBestStreak();
+    }
   }
 
   function updateTimer() {

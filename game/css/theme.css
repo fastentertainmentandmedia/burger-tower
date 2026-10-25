@@ -235,23 +235,18 @@ body[data-hint="limit"] .hint-limit-title {
   font-size: clamp(20px, 5vw, 28px);
   font-weight: 900;
   letter-spacing: .5px;
-
   color: var(--color-text-warm);
   text-shadow: 0 1px 0 #ffffff;
-
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 body[data-hint="limit"] .hint-limit-record {
   font-family: var(--font-mono);
   font-size: clamp(18px, 3.4vw, 20px);
-
   color: var(--color-text-dim);
   letter-spacing: 0.5px;
-
-  margin-bottom: 16px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(139, 111, 58, 0.25);
+  margin-bottom: 1px;
+  padding-bottom: 1px;
 }
 
 body[data-hint="limit"] #limitBestScore {
@@ -261,12 +256,28 @@ body[data-hint="limit"] #limitBestScore {
   margin-left: 4px;
 }
 
-body[data-hint="limit"] .hint-limit-body {
+body[data-hint="limit"] .hint-limit-streak {
   font-family: var(--font-mono);
-  font-size: clamp(14px, 2.8vw, 18px);
-  font-weight: 500;
-
+  font-size: clamp(18px, 3.4vw, 20px);
   color: var(--color-text-dim);
   letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(139, 111, 58, 0.25);
+}
+body[data-hint="limit"] #limitBestStreak {
+  font-size: 1.4em;
+  font-weight: 900;
+  color: var(--color-timer-warning);
+  margin-left: 4px;
+}
+
+body[data-hint="limit"] .hint-limit-body {
+  font-family: var(--font-mono);
+  font-size: clamp(18px, 3.4vw, 20px);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: var(--color-text-dim);
   text-align: center;
 }
+

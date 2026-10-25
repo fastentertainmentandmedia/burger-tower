@@ -52,10 +52,12 @@ export function createPlayerLimits(gameConfig, DEBUG_DISABLE_LIMIT = false) {
         totalGames: 0,
         totalPlayMs: 0,
         bestScore: 0,
+        bestStreak: 0,
       };
     }
     if (!p.windowStart) p.windowStart = Date.now();
     if (typeof p.bestScore !== 'number') p.bestScore = 0;
+    if (typeof p.bestStreak !== 'number') p.bestStreak = 0;
     player = p;
     refreshWindow();
     save();
@@ -81,6 +83,17 @@ export function createPlayerLimits(gameConfig, DEBUG_DISABLE_LIMIT = false) {
     if (typeof score !== 'number' || score <= 0) return false;
     if (score <= (player.bestScore || 0)) return false;
     player.bestScore = score;
+    save();
+    return true;
+  }
+
+  function getBestStreak() { return player ? (player.bestStreak || 0) : 0; }
+
+  function updateBestStreak(streak) {
+    if (!player) return false;
+    if (typeof streak !== 'number' || streak <= 0) return false;
+    if (streak <= (player.bestStreak || 0)) return false;
+    player.bestStreak = streak;
     save();
     return true;
   }
@@ -134,6 +147,7 @@ export function createPlayerLimits(gameConfig, DEBUG_DISABLE_LIMIT = false) {
   return {
     initPlayer, getRemainingMs, isLimitReached,
     getBestScore, updateBestScore,
+    getBestStreak, updateBestStreak,
     startSession, endSession, tickSession, flushSession,
     isReturning,
   };
