@@ -55,6 +55,7 @@ const ui = createUI({
 
 const rules = createRules();
 const renderer = createRenderer($.canvas, { onImageReady: () => game && game.render() });
+window.__renderer = renderer;
 
 function syncState(extraPatch) {
   const snap = rules.getState();

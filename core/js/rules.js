@@ -81,7 +81,6 @@ export function createRules() {
   const DT_SMOOTH = 0.2;   // 0..1, меньше = плавнее
 
   function tick(rawDt) {
-    // Сглаживаем dt: 80% старого + 20% нового
     smoothDt = smoothDt ? smoothDt * (1 - DT_SMOOTH) + rawDt * DT_SMOOTH : rawDt;
     const dt = smoothDt;
 
@@ -104,6 +103,7 @@ export function createRules() {
 
     return { event: null };
   }
+
   // Base + extra-bun текущей партии
   let chosenBaseType = null;
   let chosenTopType  = null;
@@ -433,6 +433,7 @@ export function createRules() {
     over = false;
     crumbleStart = 0;
     nowMs = 0;
+    smoothDt = 0;
     spawnNewBlock();
     return getState();
   }
@@ -467,6 +468,7 @@ export function createRules() {
     width: cfg.BASE_BLOCK_WIDTH,
     type: chosenBaseType,
   }];
+  smoothDt = 0;
   spawnNewBlock();
 
   return {

@@ -53,16 +53,16 @@ export function createRenderer(canvas, callbacks = {}) {
 
     const rawScale = Math.min(cssW / VW, cssH / VH);
 
-    scalePx = Math.max(1, Math.round(rawScale * dpr));
-    scale   = scalePx / dpr;   // если нужно где-то в виртуальных px
+    scale   = rawScale;               // дробный — сцена ровно по контейнеру
+    scalePx = scale * dpr;            // дробный (используется в applyTransform)
 
-    offXPx = Math.round((cssW * dpr - VW * scalePx) / 2);
-    offYPx = Math.round(cssH * dpr - VH * scalePx);
+    offXPx = (cssW * dpr - VW * scalePx) / 2;
+    offYPx = cssH * dpr - VH * scalePx;
 
     refreshColors();
     onImageReady();
 
-    ctx.imageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = true;   // ← включить сглаживание
   }
 
   function applyTransform() {
@@ -228,7 +228,9 @@ export function createRenderer(canvas, callbacks = {}) {
     if (alpha <= 0) return;
 
     const bandH = 110;
-    const centerY = (cssH / 2 - offY) / scale;   // ← центр canvas в виртуальных px
+
+    // Центр canvas в виртуальных px:
+    const centerY = (cssH * dpr / 2 - offYPx) / scalePx;
 
     ctx.save();
     ctx.globalAlpha = alpha;
@@ -285,5 +287,7 @@ export function createRenderer(canvas, callbacks = {}) {
     getTapZones,
     getTapRadius: () => Math.max(VW, VH),
     getFieldSize: () => ({ w: VW, h: VH }),
+
+    _debug: () => ({ scale, scalePx, offXPx, offYPx, dpr, cssW, cssH }),
   };
 }
