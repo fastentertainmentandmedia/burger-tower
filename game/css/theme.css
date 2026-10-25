@@ -80,7 +80,7 @@ canvas { background-color: var(--color-field-bg); }
 }
 
 .hud-timer {
-  font-size: 1.35em;
+  font-size: 1.10em;
   font-weight: 900;
   letter-spacing: 1px;
   color: var(--color-timer-normal);
@@ -89,7 +89,7 @@ canvas { background-color: var(--color-field-bg); }
 .hud-timer.is-warning  { font-size: 1.40em; color: var(--color-timer-warning); }
 .hud-timer.is-danger   { font-size: 1.45em; color: var(--color-timer-danger); }
 .hud-timer.is-critical {
-  font-size: 1.55em;
+  font-size: 1.20em;
   color: var(--color-timer-danger);
   animation: hud-timer-pulse 1s ease-in-out infinite;
 }
@@ -99,28 +99,28 @@ canvas { background-color: var(--color-field-bg); }
 }
 
 .hud-best-label, .hud-score-label {
-  font-size: 1.15em;
-  font-weight: 900;
+  font-size: 1.10em;
+  font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--color-text-dim);
 }
 .hud-best-value, .hud-score-value {
-  font-size: 1.15em;
-  font-weight: 900;
+  font-size: 1.10em;
+  font-weight: 800;
   color: var(--color-text-accent);
 }
 
 .hud-streak-label {
-  font-size: 1.15em;
-  font-weight: 900;
+  font-size: 1.10em;
+  font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--color-text-dim);
 }
 .hud-streak-value {
-  font-size: 1.15em;
-  font-weight: 900;
+  font-size: 1.10em;
+  font-weight: 800;
   color: var(--color-timer-warning);
 }
 
