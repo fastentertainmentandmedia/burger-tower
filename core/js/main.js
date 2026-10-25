@@ -46,7 +46,7 @@ const client = getClient();
   const script = document.createElement('script');
   script.async = true;
   script.src = gameConfig.ASSETS.goatcounter;
-  script.setAttribute('data-goatcounter', '');
+  script.setAttribute('data-goatcounter', 'https://fastentertainmentandmedia.goatcounter.com/count');
   script.setAttribute('data-goatcounter-settings', '{"allow_local": true}');
   document.head.appendChild(script);
 })();
