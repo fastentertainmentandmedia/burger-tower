@@ -4,8 +4,8 @@
    ============================================================ */
 
 :root {
-  --header-h: 44px;
-  --gap-sm: 12px;
+  --header-h: 40px;
+  --gap-sm: 8px;
   --field-aspect: 0.7222;
 
   --color-field-bg:      #fdf8ed;
