@@ -1,7 +1,7 @@
 // ============================================================
 // [FILE: core/js/rules.js]
-// Механика stacker. Читает типы блоков и параметры из gameConfig.
-// Поддержка BASE_TYPES + BASE_TOP_PAIRS (extra-bun) + SPAWN_ANTI_REPEAT.
+// Механика stacker. VW/VH приходят из setFieldSize (CSS-пиксели).
+// Размеры блоков/отступы — через *_RATIO от VW/VH.
 // ============================================================
 
 import { gameConfig as cfg } from '../../game/js/config.js';
@@ -9,7 +9,6 @@ import { gameConfig as cfg } from '../../game/js/config.js';
 // ----------------------------------------------------------
 // Base-типы (основания): случайно выбирается один на партию.
 // Extra-bun: привязаны к base через BASE_TOP_PAIRS.
-// Обычные ингредиенты: все, кто не base и не extra-bun.
 // ----------------------------------------------------------
 const BASE_TYPES = Array.isArray(cfg.BASE_TYPES)
   ? cfg.BASE_TYPES
@@ -29,22 +28,22 @@ function pickBaseType() {
 }
 
 // ----------------------------------------------------------
-// Дефолты для CRUMBLE (если клиент не задал)
+// CRUMBLE defaults
 // ----------------------------------------------------------
 const CRUMBLE_DEFAULTS = {
   OVERLAY_DELAY_MS:  700,
   OVERLAY_FADE_MS:   300,
   SETTLE_EXTRA_MS:   400,
-  VY_MIN:            1.5,
-  VY_MAX:            3.0,
-  VX_MIN:            0.6,
-  VX_MAX:            1.8,
-  VX_CULPRIT_MIN:    1.5,
-  VX_CULPRIT_MAX:    3.5,
+  VY_MIN:            0.003,
+  VY_MAX:            0.006,
+  VX_MIN:            0.001,
+  VX_MAX:            0.004,
+  VX_CULPRIT_MIN:    0.003,
+  VX_CULPRIT_MAX:    0.007,
   VR_RANGE:          0.12,
   VR_CULPRIT_RANGE:  0.2,
-  FADE_AT:           40,
-  FADE_SPAN:         80,
+  FADE_AT:           0.07,
+  FADE_SPAN:         0.14,
   GRAVITY:           null,
 };
 
@@ -52,21 +51,17 @@ const CRUMBLE = { ...CRUMBLE_DEFAULTS, ...(cfg.CRUMBLE || {}) };
 
 function rand(min, max) { return min + Math.random() * (max - min); }
 
-function heightOf(type) {
-  return cfg.BLOCK_TYPES[type]?.height ?? 24;
-}
-
 export function createRules() {
 
-  const VW = cfg.VIRTUAL_W;
-  const VH = cfg.VIRTUAL_H;
+  let VW = 360;
+  let VH = 600;
 
-  const pieceGravity = (CRUMBLE.GRAVITY != null) ? CRUMBLE.GRAVITY : cfg.GRAVITY;
+  const DT_SMOOTH = 0.25;
 
   let blocks = [];
   let current = null;
   let direction = 1;
-  let speed = cfg.INITIAL_SPEED;
+  let speedRatio = 0;        // speed в долях VW за кадр
   let score = 0;
   let over = false;
   let perfectStreak = 0;
@@ -75,51 +70,75 @@ export function createRules() {
   let effects = [];
   let crumbleStart = 0;
   let nowMs = 0;
-
-  // в createRules(), рядом с let nowMs = 0;
   let smoothDt = 0;
-  const DT_SMOOTH = 0.3;   // 0..1, меньше = плавнее
 
-  function tick(rawDt) {
-    smoothDt = smoothDt ? smoothDt * (1 - DT_SMOOTH) + rawDt * DT_SMOOTH : rawDt;
-    const dt = smoothDt;
-
-    nowMs += dt;
-
-    if (current && !over) {
-      current.x += direction * speed * (dt / 16.6667);
-      if (direction === 1 && current.x > VW) {
-        current.x = VW;
-        direction = -1;
-      } else if (direction === -1 && current.x + current.width < 0) {
-        current.x = -current.width;
-        direction = 1;
-      }
-    }
-
-    updateFallingPieces();
-    updateEffects(dt);
-    if (!over) updateCamera();
-
-    return { event: null };
-  }
-
-  // Base + extra-bun текущей партии
   let chosenBaseType = null;
   let chosenTopType  = null;
 
-  // Антиповтор
   let lastSpawnedType = null;
   let recentSpawns = [];
 
+  // ----------------------------------------------------------
+  // Ratio → px
+  // ----------------------------------------------------------
+  function baseBlockWidth() {
+    return VW * (cfg.BASE_BLOCK_WIDTH_RATIO ?? 0.42);
+  }
+
+  function minBlockWidth() {
+    return VW * (cfg.MIN_BLOCK_WIDTH_RATIO ?? 0.08);
+  }
+
+  function heightOf(type) {
+    const def = cfg.BLOCK_TYPES[type];
+    if (!def) return VH * 0.04;
+    return def.height <= 1 ? def.height * VH : def.height;
+  }
+
+  function plateYOffset() {
+    return VH * (cfg.PLATE_Y_OFFSET_RATIO ?? 0.03);
+  }
+
+  function topMargin() {
+    return VH * (cfg.TOP_MARGIN_RATIO ?? 0.18);
+  }
+
+  function gravityPx() {
+    const g = (CRUMBLE.GRAVITY != null) ? CRUMBLE.GRAVITY : (cfg.GRAVITY_RATIO ?? 0.0008);
+    // В config.js GRAVITY_RATIO — доля VH за кадр²
+    return VH * g;
+  }
+
+  function initialSpeed() {
+    return VW * (cfg.INITIAL_SPEED_RATIO ?? 0.006);
+  }
+
+  function speedIncrement() {
+    return VW * (cfg.SPEED_INCREMENT_RATIO ?? 0.0002);
+  }
+
+  function maxSpeed() {
+    return VW * (cfg.MAX_SPEED_RATIO ?? 0.014);
+  }
+
+  function perfectTolerance() {
+    return VW * (cfg.PERFECT_TOLERANCE_RATIO ?? 0.007);
+  }
+
+  function setFieldSize(w, h) {
+    VW = w;
+    VH = h;
+    speedRatio = initialSpeed();
+  }
+
   function blockTopY(index) {
-    let y = VH - cfg.PLATE_Y_OFFSET;
+    let y = VH - plateYOffset();
     for (let i = 0; i < index; i++) y -= heightOf(blocks[i].type);
     return y + cameraOffset;
   }
 
   // ----------------------------------------------------------
-  // Выбор типа для обычного спавна (с антиповтором)
+  // Антиповтор + выбор типа
   // ----------------------------------------------------------
   function pushRecent(type) {
     const n = cfg.SPAWN_ANTI_REPEAT || 0;
@@ -137,7 +156,6 @@ export function createRules() {
       for (let i = 0; i < w; i++) pool.push(id);
     }
     if (pool.length === 0) {
-      // fallback: игнорируем антиповтор
       const all = [];
       for (const id of TYPE_IDS) {
         const w = cfg.BLOCK_TYPES[id].weight || 0;
@@ -150,8 +168,10 @@ export function createRules() {
 
   function spawnNewBlock() {
     const last = blocks[blocks.length - 1];
+    const MIN_W = minBlockWidth();
     let w = last.width;
-    if (w < cfg.MIN_BLOCK_WIDTH) w = cfg.MIN_BLOCK_WIDTH;
+    if (w < MIN_W) w = MIN_W;
+
     const fromLeft = Math.random() < 0.5;
     const x = fromLeft ? -w : VW;
     direction = fromLeft ? 1 : -1;
@@ -161,16 +181,11 @@ export function createRules() {
       && lastSpawnedType !== chosenTopType
       && Math.random() < (cfg.BUN_CHANCE || 0);
 
-    if (canTop) {
-      type = chosenTopType;
-    } else {
-      type = pickTypeAvoidingRecent();
-    }
+    if (canTop) type = chosenTopType;
+    else type = pickTypeAvoidingRecent();
 
     lastSpawnedType = type;
-    if (type !== chosenTopType) {
-      pushRecent(type);
-    }
+    if (type !== chosenTopType) pushRecent(type);
 
     current = { x, width: w, type };
   }
@@ -181,13 +196,13 @@ export function createRules() {
   function spawnPiece(x, y, w, h, type, side, opts = {}) {
     fallingPieces.push({
       x, y, w, h, type,
-      vx: side * rand(CRUMBLE.VX_MIN, CRUMBLE.VX_MAX) + (Math.random() - 0.5) * 1.5,
-      vy: -rand(CRUMBLE.VY_MIN, CRUMBLE.VY_MAX),
+      vx: side * VW * rand(CRUMBLE.VX_MIN, CRUMBLE.VX_MAX) + (Math.random() - 0.5) * VW * 0.002,
+      vy: -VH * rand(CRUMBLE.VY_MIN, CRUMBLE.VY_MAX),
       rot: 0,
       vr: (Math.random() - 0.5) * CRUMBLE.VR_RANGE,
       alpha: 1,
-      fadeAt: opts.fadeAt ?? (VH - 40),
-      fadeSpan: opts.fadeSpan ?? 60,
+      fadeAt: opts.fadeAt ?? (VH - VH * 0.07),
+      fadeSpan: opts.fadeSpan ?? VH * 0.1,
     });
   }
 
@@ -204,9 +219,6 @@ export function createRules() {
     }
   }
 
-  // ----------------------------------------------------------
-  // Рассыпание башни при game over.
-  // ----------------------------------------------------------
   function crumbleTower(cameraAtCrash) {
     const cam = cameraAtCrash || 0;
 
@@ -214,7 +226,7 @@ export function createRules() {
       const b = blocks[i];
       const h = heightOf(b.type);
 
-      let top = VH - cfg.PLATE_Y_OFFSET;
+      let top = VH - plateYOffset();
       for (let k = 0; k < i; k++) top -= heightOf(blocks[k].type);
       const screenY = top - h + cam;
 
@@ -229,13 +241,13 @@ export function createRules() {
         w: b.width,
         h,
         type: b.type,
-        vx: side * rand(CRUMBLE.VX_MIN, CRUMBLE.VX_MAX),
-        vy: rand(CRUMBLE.VY_MIN, CRUMBLE.VY_MAX),
+        vx: side * VW * rand(CRUMBLE.VX_MIN, CRUMBLE.VX_MAX),
+        vy: VH * rand(CRUMBLE.VY_MIN, CRUMBLE.VY_MAX),
         rot: 0,
         vr: (Math.random() - 0.5) * CRUMBLE.VR_RANGE,
         alpha: 1,
-        fadeAt: VH + CRUMBLE.FADE_AT,
-        fadeSpan: CRUMBLE.FADE_SPAN,
+        fadeAt: VH + VH * (CRUMBLE.FADE_AT ?? 0.07),
+        fadeSpan: VH * (CRUMBLE.FADE_SPAN ?? 0.14),
       });
     }
 
@@ -248,10 +260,10 @@ export function createRules() {
     effects.push({ type: 'ring', x: cx, y: cy, r: 2, maxR: Math.max(60, w * 1.0), life: 0, duration: 520, color: 'perfectRing' });
     for (let i = 0; i < 10; i++) {
       const a = (Math.PI * 2 * i) / 10 + Math.random() * 0.4;
-      const spd = 1.8 + Math.random() * 2.4;
+      const spd = VW * (0.004 + Math.random() * 0.005);
       effects.push({
         type: 'spark', x: cx, y: cy,
-        vx: Math.cos(a) * spd, vy: Math.sin(a) * spd - 1,
+        vx: Math.cos(a) * spd, vy: Math.sin(a) * spd - VH * 0.001,
         size: 2 + Math.random() * 2.5,
         life: 0, duration: 420 + Math.random() * 200, color: 'spark',
       });
@@ -259,8 +271,8 @@ export function createRules() {
     effects.push({
       type: 'text', x: cx, y: cy - 8, life: 0, duration: 900,
       text: perfectStreak + 1 > 1
-        ? `+${Math.min(1 + perfectStreak, cfg.PERFECT_BONUS_MAX)} ИДЕАЛЬНО!`
-        : 'ИДЕАЛЬНО!',
+        ? `+${Math.min(1 + perfectStreak, cfg.PERFECT_BONUS_MAX)} PERFECT!`
+        : 'PERFECT!',
       color: 'perfectText', stroke: 'perfectStroke',
     });
     effects.push({ type: 'glow', x: cx, y: cy, w, life: 0, duration: 300, color: 'perfectGlow' });
@@ -274,7 +286,7 @@ export function createRules() {
 
     if (currentBlock) {
       const h = heightOf(currentBlock.type);
-      let top = VH - cfg.PLATE_Y_OFFSET;
+      let top = VH - plateYOffset();
       for (let k = 0; k < blocks.length; k++) top -= heightOf(blocks[k].type);
       const screenY = top - h + cam;
       fallingPieces.push({
@@ -283,13 +295,13 @@ export function createRules() {
         w: currentBlock.width,
         h,
         type: currentBlock.type,
-        vx: direction * rand(CRUMBLE.VX_CULPRIT_MIN, CRUMBLE.VX_CULPRIT_MAX),
-        vy: rand(CRUMBLE.VY_MIN, CRUMBLE.VY_MAX),
+        vx: direction * VW * rand(CRUMBLE.VX_CULPRIT_MIN, CRUMBLE.VX_CULPRIT_MAX),
+        vy: VH * rand(CRUMBLE.VY_MIN, CRUMBLE.VY_MAX),
         rot: 0,
         vr: (Math.random() - 0.5) * CRUMBLE.VR_CULPRIT_RANGE,
         alpha: 1,
-        fadeAt: VH + CRUMBLE.FADE_AT,
-        fadeSpan: CRUMBLE.FADE_SPAN,
+        fadeAt: VH + VH * (CRUMBLE.FADE_AT ?? 0.07),
+        fadeSpan: VH * (CRUMBLE.FADE_SPAN ?? 0.14),
       });
     }
 
@@ -315,12 +327,12 @@ export function createRules() {
 
     const lastC = last.x + last.width / 2;
     const curC  = current.x + current.width / 2;
-    const isPerfect = Math.abs(lastC - curC) <= cfg.PERFECT_TOLERANCE;
+    const isPerfect = Math.abs(lastC - curC) <= perfectTolerance();
 
     let finalX = isPerfect ? last.x : oL;
     let finalW = isPerfect ? current.width : oW;
 
-    if (finalW < cfg.MIN_BLOCK_WIDTH) {
+    if (finalW < minBlockWidth()) {
       triggerGameOver(current);
       return { event: 'gameover' };
     }
@@ -340,20 +352,21 @@ export function createRules() {
     }
 
     blocks.push({ x: finalX, width: finalW, type: current.type });
-    speed = Math.min(speed + cfg.SPEED_INCREMENT, cfg.MAX_SPEED);
+    speedRatio = Math.min(speedRatio + speedIncrement(), maxSpeed());
     spawnNewBlock();
     return { event };
   }
 
   function updateFallingPieces() {
+    const g = gravityPx();
     for (let i = fallingPieces.length - 1; i >= 0; i--) {
       const p = fallingPieces[i];
-      p.vy += pieceGravity;
+      p.vy += g;
       p.x += p.vx;
       p.y += p.vy;
       p.rot += p.vr;
 
-      if (p.y > VH + 200) { fallingPieces.splice(i, 1); continue; }
+      if (p.y > VH + VH * 0.3) { fallingPieces.splice(i, 1); continue; }
       if (p.y > p.fadeAt) {
         p.alpha = Math.max(0, (p.fadeAt + p.fadeSpan - p.y) / p.fadeSpan);
         if (p.alpha <= 0) fallingPieces.splice(i, 1);
@@ -370,31 +383,35 @@ export function createRules() {
         const t = e.life / e.duration;
         e.r = 4 + (e.maxR - 4) * (1 - Math.pow(1 - t, 3));
       } else if (e.type === 'spark') {
-        e.vy += 0.12;
+        e.vy += VH * 0.0002;
         e.x += e.vx;
         e.y += e.vy;
         e.vx *= 0.98;
       } else if (e.type === 'text') {
-        e.y -= dt * 0.04;
+        e.y -= dt * VH * 0.00004;
       }
     }
   }
 
   function updateCamera() {
     if (blocks.length === 0) return;
-    let baseTop = VH - cfg.PLATE_Y_OFFSET;
+    let baseTop = VH - plateYOffset();
     for (let i = 0; i < blocks.length; i++) baseTop -= heightOf(blocks[i].type);
     const screenTop = baseTop + cameraOffset;
-    if (screenTop < cfg.TOP_MARGIN) {
-      cameraOffset += (cfg.TOP_MARGIN - screenTop) * cfg.CAMERA_LERP + 0.5;
+    const TM = topMargin();
+    if (screenTop < TM) {
+      cameraOffset += (TM - screenTop) * (cfg.CAMERA_LERP ?? 0.15) + 0.5;
     }
   }
 
-  function tick(dt) {
+  function tick(rawDt) {
+    smoothDt = smoothDt ? smoothDt * (1 - DT_SMOOTH) + rawDt * DT_SMOOTH : rawDt;
+    const dt = smoothDt;
     nowMs += dt;
 
     if (current && !over) {
-      current.x += direction * speed * (dt / 16.6667);
+      const step = speedRatio * (dt / 16.6667);
+      current.x += direction * step;
       if (direction === 1 && current.x > VW) {
         current.x = VW;
         direction = -1;
@@ -417,9 +434,10 @@ export function createRules() {
     lastSpawnedType = null;
     recentSpawns = [];
 
+    const baseW = baseBlockWidth();
     blocks = [{
-      x: (VW - cfg.BASE_BLOCK_WIDTH) / 2,
-      width: cfg.BASE_BLOCK_WIDTH,
+      x: (VW - baseW) / 2,
+      width: baseW,
       type: chosenBaseType,
     }];
     fallingPieces = [];
@@ -427,8 +445,7 @@ export function createRules() {
     cameraOffset = 0;
     perfectStreak = 0;
     score = 0;
-    smoothDt = 0;
-    speed = cfg.INITIAL_SPEED;
+    speedRatio = initialSpeed();
     direction = 1;
     over = false;
     crumbleStart = 0;
@@ -450,7 +467,7 @@ export function createRules() {
 
   function getState() {
     return {
-      blocks, current, direction, speed, score, over,
+      blocks, current, direction, speed: speedRatio, score, over,
       perfectStreak, cameraOffset, fallingPieces, effects,
       crumbleStart,
       crumbleDelayMs: CRUMBLE.OVERLAY_DELAY_MS,
@@ -460,20 +477,17 @@ export function createRules() {
     };
   }
 
-  // Инициализация модуля
+  // Инициализация: дефолтный размер, пока не пришёл setFieldSize
+  const baseW0 = baseBlockWidth();
   chosenBaseType = pickBaseType();
   chosenTopType  = BASE_TOP_PAIRS[chosenBaseType] || null;
-  blocks = [{
-    x: (VW - cfg.BASE_BLOCK_WIDTH) / 2,
-    width: cfg.BASE_BLOCK_WIDTH,
-    type: chosenBaseType,
-  }];
-  smoothDt = 0;
+  blocks = [{ x: (VW - baseW0) / 2, width: baseW0, type: chosenBaseType }];
+  speedRatio = initialSpeed();
   spawnNewBlock();
 
   return {
     reset, showPreview, tick, action,
-    setFieldSize: () => {},
+    setFieldSize,
     getScore, isOver, getState,
 
     isSettled: () => {

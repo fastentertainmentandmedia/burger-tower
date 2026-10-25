@@ -55,7 +55,9 @@ const ui = createUI({
 
 const rules = createRules();
 const renderer = createRenderer($.canvas, { onImageReady: () => game && game.render() });
-window.__renderer = renderer;
+
+// Начальные размеры
+rules.setFieldSize($.canvas.clientWidth || 360, $.canvas.clientHeight || 600);
 
 function syncState(extraPatch) {
   const snap = rules.getState();
@@ -120,6 +122,7 @@ createResize({
   canvas: $.canvas,
   onResize: (w, h, dpr) => {
     renderer.resize(w, h, dpr);
+    rules.setFieldSize(w, h);
     ui.setHudFontSize(w);
     game.render();
   },

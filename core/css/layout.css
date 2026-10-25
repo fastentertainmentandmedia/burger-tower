@@ -55,22 +55,10 @@
 .canvas-container {
   flex: 1 1 auto;
   min-height: 0;
-
   position: relative;
-
   width: 100%;
-  max-width: calc(
-    (100dvh - var(--header-h) - var(--gap-sm) * 2
-              - env(safe-area-inset-top) - env(safe-area-inset-bottom)
-              - var(--wrapper-pad) * 2)
-    * var(--field-aspect, 0.6)
-  );
   max-height: 100%;
-
-  aspect-ratio: var(--field-aspect, 0.6);
-
   margin: 0 auto;
-
   touch-action: manipulation;
 }
 

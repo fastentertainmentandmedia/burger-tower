@@ -1,7 +1,7 @@
 // ============================================================
 // [FILE: core/js/render.js]
-// Contain-масштаб сцены. Всё (включая текст) — в виртуальных px.
-// Картинки ингредиентов: fit (contain|cover|fill) + clip по блоку.
+// Рендер 1:1 в CSS-пикселях (как в прототипе). Без scale/offX/offY.
+// VW/VH = cssW/cssH. SVG/PNG рисуются через drawImage 1:1.
 // ============================================================
 
 import { gameConfig as cfg } from '../../game/js/config.js';
@@ -13,15 +13,13 @@ export function createRenderer(canvas, callbacks = {}) {
   const ctx = canvas.getContext('2d', { alpha: false });
   const onImageReady = callbacks.onImageReady ?? (() => {});
 
-  const VW = cfg.VIRTUAL_W;
-  const VH = cfg.VIRTUAL_H;
+  let VW = canvas.clientWidth  || 360;
+  let VH = canvas.clientHeight || 600;
 
   let cssW = VW, cssH = VH, dpr = 1;
-  let scalePx = 1, offXPx = 0, offYPx = 0;
-  let scale = 1;   // виртуальный (если где-то ещё используется)
 
   let COLORS = {};
-  let FONT = 'font-family: Arial, "Helvetica Neue", Helvetica, sans-serif';
+  let FONT = 'Arial, "Helvetica Neue", Helvetica, sans-serif';
 
   const IMG = {};
   (function loadImages() {
@@ -43,7 +41,7 @@ export function createRenderer(canvas, callbacks = {}) {
       ...readColorTokens(engineConfig.COLORS),
       ...readColorTokens(cfg.COLORS || {}),
     };
-    FONT = readFontToken('--font-mono', 'sans-serif');
+    FONT = readFontToken('--font-mono', 'Arial, "Helvetica Neue", Helvetica, sans-serif');
   }
 
   function resize(w, h, dprIn) {
@@ -51,27 +49,21 @@ export function createRenderer(canvas, callbacks = {}) {
     cssH = h;
     dpr = dprIn || 1;
 
-    const rawScale = Math.min(cssW / VW, cssH / VH);
-
-    scale   = rawScale;               // дробный — сцена ровно по контейнеру
-    scalePx = scale * dpr;            // дробный (используется в applyTransform)
-
-    offYPx = Math.round(cssH * dpr - VH * scalePx);
-    offXPx = Math.round((cssW * dpr - VW * scalePx) / 2);
+    VW = cssW;
+    VH = cssH;
 
     refreshColors();
     onImageReady();
 
-    ctx.imageSmoothingEnabled = true;   // ← включить сглаживание
+    ctx.imageSmoothingEnabled = true;
   }
 
   function applyTransform() {
-    ctx.setTransform(scalePx, 0, 0, scalePx, offXPx, offYPx);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   // ----------------------------------------------------------
-  // Спецификация вписывания. Дефолт — 'fill' (картинка ровно в блок),
-  // чтобы не было гэпов и «сжатия по высоте» при обрезке.
+  // Спецификация вписывания. Дефолт — 'fill' (картинка ровно в блок).
   // Приоритет: per-type > INGREDIENT_FIT_OVERRIDES > глобальные.
   // ----------------------------------------------------------
   function getFitSpec(type) {
@@ -86,11 +78,6 @@ export function createRenderer(canvas, callbacks = {}) {
   }
 
   function drawIngredientAt(x, y, w, h, type) {
-    // x, y — БЕЗ округления (плавное субпиксельное движение)
-    // w, h — округляем (стабильный размер)
-    w = Math.round(w);
-    h = Math.round(h);
-
     const entry = IMG[type];
 
     if (entry && entry.img && entry.ready) {
@@ -113,20 +100,11 @@ export function createRenderer(canvas, callbacks = {}) {
         dh = innerH * spec.scale;
       }
 
-      // Позиция картинки — не округляем (плавное движение)
-      // Размеры — не округляем (пропорции точнее)
+      // Без округлений: imageSmoothingEnabled=true сглаживает субпиксель
       const dx = x + (w - dw) / 2;
       const dy = y + (h - dh) / 2;
 
-      ctx.save();
-      ctx.beginPath();
-      // Клип по блоку — тоже без округления, чтобы совпадал с картинкой
-      ctx.rect(x, y, w, h);
-      ctx.clip();
-
       ctx.drawImage(entry.img, dx, dy, dw, dh);
-
-      ctx.restore();
       return;
     }
 
@@ -134,34 +112,38 @@ export function createRenderer(canvas, callbacks = {}) {
   }
 
   function drawBackground() {
-    // Заливаем весь canvas (экранные координаты) — без чёрных полос
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const g = ctx.createLinearGradient(0, 0, 0, cssH * dpr);
+    const g = ctx.createLinearGradient(0, 0, 0, VH);
     g.addColorStop(0, COLORS.bgGradTop || COLORS.bg);
     g.addColorStop(1, COLORS.bgGradBottom || COLORS.bg);
     ctx.fillStyle = g;
-    ctx.fillRect(0, 0, cssW * dpr, cssH * dpr);
+    ctx.fillRect(0, 0, VW, VH);
+  }
 
-    applyTransform();
+  function heightOf(type) {
+    const def = cfg.BLOCK_TYPES[type];
+    if (!def) return VH * 0.04;
+    return def.height <= 1 ? def.height * VH : def.height;
   }
 
   function drawBlocks(state) {
+    const plateOffset = VH * (cfg.PLATE_Y_OFFSET_RATIO ?? 0.03);
+
     for (let i = 0; i < state.blocks.length; i++) {
       const b = state.blocks[i];
-      let y = VH - cfg.PLATE_Y_OFFSET;
+      let y = VH - plateOffset;
       for (let k = 0; k < i; k++) {
-        y -= (cfg.BLOCK_TYPES[state.blocks[k].type]?.height ?? 24);
+        y -= heightOf(state.blocks[k].type);
       }
-      const h = cfg.BLOCK_TYPES[b.type]?.height ?? 24;
+      const h = heightOf(b.type);
       drawIngredientAt(b.x, y - h + state.cameraOffset, b.width, h, b.type);
     }
 
     if (!state.over && state.current) {
-      let y = VH - cfg.PLATE_Y_OFFSET;
+      let y = VH - plateOffset;
       for (let k = 0; k < state.blocks.length; k++) {
-        y -= (cfg.BLOCK_TYPES[state.blocks[k].type]?.height ?? 24);
+        y -= heightOf(state.blocks[k].type);
       }
-      const h = cfg.BLOCK_TYPES[state.current.type]?.height ?? 24;
+      const h = heightOf(state.current.type);
       drawIngredientAt(state.current.x, y - h + state.cameraOffset, state.current.width, h, state.current.type);
     }
   }
@@ -228,42 +210,31 @@ export function createRenderer(canvas, callbacks = {}) {
 
     const bandH = 110;
 
-    // Центр canvas в виртуальных px:
-    const centerY = (cssH * dpr / 2 - offYPx) / scalePx;
-
     ctx.save();
     ctx.globalAlpha = alpha;
 
     ctx.fillStyle = COLORS.gameOverOverlay || 'rgba(243,239,232,0.93)';
-    ctx.fillRect(0, centerY - bandH / 2, VW, bandH);
+    ctx.fillRect(0, VH / 2 - bandH / 2, VW, bandH);
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const cx = VW / 2;
 
     ctx.fillStyle = COLORS.gameOverTitle || '#1f1d1a';
     ctx.font = `bold 28px ${FONT}`;
-    ctx.fillText('Хорошая попытка', cx, centerY - 14);
+    ctx.fillText('Хорошая попытка', VW / 2, VH / 2 - 14);
 
     ctx.font = `18px ${FONT}`;
-    ctx.fillText('нажмите на экран чтобы продолжить', cx, centerY + 20);
+    ctx.fillText('нажмите на экран чтобы продолжить', VW / 2, VH / 2 + 20);
 
     ctx.restore();
   }
 
   function render(state) {
+    applyTransform();
     drawBackground();
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(0, 0, VW, VH);
-    ctx.clip();
-
     drawBlocks(state);
     drawFallingPieces(state);
     drawEffects(state);
-
-    ctx.restore();
 
     if (state.over) {
       const CR = cfg.CRUMBLE || {};
@@ -286,7 +257,5 @@ export function createRenderer(canvas, callbacks = {}) {
     getTapZones,
     getTapRadius: () => Math.max(VW, VH),
     getFieldSize: () => ({ w: VW, h: VH }),
-
-    _debug: () => ({ scale, scalePx, offXPx, offYPx, dpr, cssW, cssH }),
   };
 }
