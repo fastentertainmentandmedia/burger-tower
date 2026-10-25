@@ -71,6 +71,12 @@ canvas { background-color: var(--color-field-bg); }
 /* ============================================================
    [BLOCK: hud]
    ============================================================ */
+
+@media (max-width: 420px) {
+  .hud-best-label, .hud-score-label, .hud-streak-label { font-size: 0.9em; }
+  .hud-best-value, .hud-score-value, .hud-streak-value { font-size: 0.95em; }
+}
+
 .hud-layer {
   font-family: var(--font-mono);
   color: var(--color-text-accent);
