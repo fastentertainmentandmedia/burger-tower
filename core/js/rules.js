@@ -56,8 +56,6 @@ export function createRules() {
   let VW = 360;
   let VH = 600;
 
-  const DT_SMOOTH = 0.25;
-
   let blocks = [];
   let current = null;
   let direction = 1;
@@ -70,7 +68,6 @@ export function createRules() {
   let effects = [];
   let crumbleStart = 0;
   let nowMs = 0;
-  let smoothDt = 0;
 
   let chosenBaseType = null;
   let chosenTopType  = null;
@@ -405,8 +402,8 @@ export function createRules() {
   }
 
   function tick(rawDt) {
-    smoothDt = smoothDt ? smoothDt * (1 - DT_SMOOTH) + rawDt * DT_SMOOTH : rawDt;
-    const dt = smoothDt;
+    // Жёсткое ограничение: пропуск кадров не даёт «прыжка»
+    const dt = Math.min(rawDt, 20);
     nowMs += dt;
 
     if (current && !over) {
@@ -424,6 +421,9 @@ export function createRules() {
     updateFallingPieces();
     updateEffects(dt);
     if (!over) updateCamera();
+
+    //console.log('tick dt=', dt.toFixed(2), 'x=', current ? current.x.toFixed(2) : '-');
+
 
     return { event: null };
   }
@@ -450,7 +450,6 @@ export function createRules() {
     over = false;
     crumbleStart = 0;
     nowMs = 0;
-    smoothDt = 0;
     spawnNewBlock();
     return getState();
   }

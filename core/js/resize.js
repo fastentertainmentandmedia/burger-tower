@@ -26,8 +26,7 @@ export function createResize({ canvas, onResize }) {
     if (canvas.width !== pixelW || canvas.height !== pixelH) {
       canvas.width = pixelW;
       canvas.height = pixelH;
-      canvas.style.width = cssW + 'px';
-      canvas.style.height = cssH + 'px';
+      console.log('resize', cssW, cssH);
       onResize(cssW, cssH, dpr);
     }
   }

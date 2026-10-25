@@ -28,6 +28,8 @@ export function createLoop({ rules, renderer, limits, callbacks }) {
       if (dt < 0) dt = 0;
       if (dt > MAX_DT) dt = MAX_DT;
 
+
+
       rules.tick(dt);
       renderer.render(rules.getState());
 
@@ -47,7 +49,6 @@ export function createLoop({ rules, renderer, limits, callbacks }) {
     lastTs = ts;
     if (dt < 0) dt = 0;
     if (dt > MAX_DT) dt = MAX_DT;
-
     if (!rules.isOver() && limits.isLimitReached()) { end('limit'); return; }
 
     const result = rules.tick(dt);
