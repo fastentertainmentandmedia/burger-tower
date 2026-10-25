@@ -28,14 +28,17 @@ function sendToYm(goal, params) {
 
 function sendToGoatCounter(goal, params) {
   try {
-    const parts = [goal];
+    const parts = [];
+    if (params?.client) parts.push(params.client);
+    parts.push(goal);
     if (params?.score !== undefined) parts.push('score-' + params.score);
     if (params?.win !== undefined) parts.push('win-' + params.win);
     if (params?.type) parts.push('type-' + params.type);
     if (params?.number !== undefined) parts.push('num-' + params.number);
+    if (params?.streak !== undefined) parts.push('streak-' + params.streak);
 
     window.goatcounter.count({
-      path: parts.join('_'),
+      path: parts.join('/'),
       title: goal,
       event: true,
     });

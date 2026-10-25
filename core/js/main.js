@@ -36,13 +36,67 @@ const $ = createDOM({
   hudStreakLabel:    'hudStreakLabel',
 }, { required: ['canvas', 'container', 'startHint', 'introModal', 'introAccept'] });
 
+// ------------------------------------------------------------
+// Аналитика: client из ?ref= / ?client=
+// ------------------------------------------------------------
+const client = getClient();
+
+(function loadGoatCounter() {
+  window.goatcounter = { allow_local: true };
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = gameConfig.ASSETS.goatcounter;
+  script.setAttribute('data-goatcounter', '');
+  script.setAttribute('data-goatcounter-settings', '{"allow_local": true}');
+  document.head.appendChild(script);
+})();
+
+(function loadMetrika() {
+  let loaded = false;
+  function init() {
+    if (loaded) return;
+    loaded = true;
+    (function(m,e,t,r,i,k,a){
+      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      for (var j = 0; j < document.scripts.length; j++) {
+        if (document.scripts[j].src === r) { return; }
+      }
+      k=e.createElement(t), a=e.getElementsByTagName(t)[0];
+      k.async = 1; k.src = r;
+      a.parentNode.insertBefore(k, a);
+    })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+    window.ym(113332587, 'init', {
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true,
+      webvisor: true,
+    });
+  }
+
+  const onInteraction = () => {
+    document.removeEventListener('pointerdown', onInteraction);
+    document.removeEventListener('keydown', onInteraction);
+    setTimeout(init, 500);
+  };
+  document.addEventListener('pointerdown', onInteraction, { once: true });
+  document.addEventListener('keydown', onInteraction, { once: true });
+
+  window.addEventListener('load', () => {
+    setTimeout(init, 5000);
+  }, { once: true });
+})();
+
+// ------------------------------------------------------------
+
 const limits = createPlayerLimits(gameConfig, DEBUG_DISABLE_LIMIT);
 limits.initPlayer();
 state.bestScore = limits.getBestScore();
 
 trackGoal('game_loaded', {
   type: limits.isReturning() ? 'returning' : 'new',
-  client: getClient(),
+  client,
 });
 
 const ui = createUI({
@@ -82,13 +136,13 @@ const game = createLoop({
     },
     onPerfect: (snap) => {
       const streak = snap?.perfectStreak ?? 0;
-      trackGoal('perfect_hit', { streak });
+      trackGoal('perfect_hit', { streak, client });
       limits.updateBestStreak(streak);
       syncState({ perfectStreak: streak });
     },
     onStart: () => {
       gamesThisSession++;
-      trackGoal('game_start', { number: gamesThisSession });
+      trackGoal('game_start', { number: gamesThisSession, client });
       syncState({
         gameStarted: true, gameActive: true, gameOver: false, hintVisible: false,
         perfectStreak: 0,
@@ -96,7 +150,13 @@ const game = createLoop({
     },
     onGameOver: ({ win, score }) => {
       const isNewRecord = limits.updateBestScore(score);
-      trackGoal('game_over', { score, win: win ? 1 : 0, number: gamesThisSession });
+      trackGoal('game_over', {
+        score,
+        win: win ? 1 : 0,
+        number: gamesThisSession,
+        streak: state.perfectStreak ?? 0,
+        client,
+      });
       syncState({
         gameActive: false, gameStarted: true, gameOver: true, win: !!win,
         perfectStreak: 0,
@@ -105,7 +165,7 @@ const game = createLoop({
     },
     onLimit: ({ score = 0 } = {}) => {
       const isNewRecord = score > 0 && limits.updateBestScore(score);
-      trackGoal('daily_limit_reached', { score, number: gamesThisSession });
+      trackGoal('daily_limit_reached', { score, number: gamesThisSession, client });
       syncState({
         limitReached: true, hintVisible: true, hintKind: 'limit',
         perfectStreak: 0,
