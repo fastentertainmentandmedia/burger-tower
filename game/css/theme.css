@@ -99,7 +99,6 @@ canvas { background-color: var(--color-field-bg); }
 .hud-timer {
   font-size: 1.10em;
   font-weight: 900;
-  letter-spacing: 1px;
   color: var(--color-timer-normal);
   transition: color .2s, font-size .2s, opacity .2s;
 }
@@ -117,27 +116,25 @@ canvas { background-color: var(--color-field-bg); }
 
 .hud-best-label, .hud-score-label {
   font-size: 1.10em;
-  font-weight: 800;
-  letter-spacing: 1px;
+  font-weight: 700;
   text-transform: uppercase;
   color: var(--color-text-dim);
 }
 .hud-best-value, .hud-score-value {
   font-size: 1.10em;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--color-text-accent);
 }
 
 .hud-streak-label {
   font-size: 1.10em;
-  font-weight: 800;
-  letter-spacing: 1px;
+  font-weight: 700;
   text-transform: uppercase;
   color: var(--color-text-dim);
 }
 .hud-streak-value {
   font-size: 1.10em;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--color-timer-warning);
 }
 
