@@ -9,13 +9,13 @@
            L80 140
            Q60 140 60 130
            Z"
-        fill="#6D4C41" stroke="#4E342E" stroke-width="2.5"/>
+        fill="#6D4C41" stroke="#4E342E" stroke-width="2"/>
 
   <!-- Patty highlight -->
-  <path d="M90 95 L310 95" fill="none" stroke="#8D6E63" stroke-width="2.5" opacity="0.6"/>
+  <path d="M90 95 L310 95" fill="none" stroke="#8A6A55" stroke-width="2"/>
 
   <!-- Criss-cross grill marks -->
-  <g stroke="#3E2723" stroke-width="2.5" stroke-linecap="round" opacity="0.3">
+  <g stroke="#5A4230" stroke-width="2" stroke-linecap="round">
     <!-- Diagonal down-right -->
     <line x1="85" y1="80" x2="135" y2="132"/>
     <line x1="115" y1="80" x2="165" y2="132"/>
@@ -35,8 +35,8 @@
   </g>
 
   <!-- Top edge detail -->
-  <path d="M80 75 L320 75" fill="none" stroke="#3E2723" stroke-width="1.5" opacity="0.4"/>
+  <path d="M80 75 L320 75" fill="none" stroke="#5A4230" stroke-width="1"/>
 
   <!-- Bottom edge detail -->
-  <path d="M80 135 L320 135" fill="none" stroke="#3E2723" stroke-width="1.5" opacity="0.4"/>
+  <path d="M80 135 L320 135" fill="none" stroke="#5A4230" stroke-width="1"/>
 </svg>
