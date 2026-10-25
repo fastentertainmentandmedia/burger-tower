@@ -265,7 +265,7 @@ export function createRules() {
         life: 0, duration: 420 + Math.random() * 200, color: 'spark',
       });
     }
-    const label = perfectStreak > 1 ? `PERFECT x${perfectStreak}!` : 'PERFECT!';
+    const label = 'ИДЕАЛЬНО';
     effects.push({
       type: 'text', x: cx, y: cy - 8, life: 0, duration: 900,
       text: `${label} +${gain}`,

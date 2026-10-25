@@ -5,7 +5,7 @@
 // ============================================================
 
 export const gameConfig = {
-  STORAGE_KEY: 'stack_burger',
+  STORAGE_KEY: 'burger_tower',
   PLAY_LIMIT_MINUTES: 1,
   LIMIT_RESET_HOURS: 4,
 
@@ -160,4 +160,4 @@ export const gameConfig = {
   },
 };
 
-export const DEBUG_DISABLE_LIMIT = false;
+export const DEBUG_DISABLE_LIMIT = true;
