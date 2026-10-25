@@ -4,18 +4,12 @@
 // Размеры — в долях от VW/VH (ratio). VW/VH = cssW/cssH.
 // ============================================================
 
-import { roundRectPath } from '../../core/js/drawers.js';
-
 export const gameConfig = {
   STORAGE_KEY: 'stack_burger',
   PLAY_LIMIT_MINUTES: 1,
   LIMIT_RESET_HOURS: 4,
 
   ASSETS: {
-    logo:        'game/assets/logo.svg',
-    favicon16:   'game/assets/favicon/favicon-16x16.png',
-    favicon32:   'game/assets/favicon/favicon-32x32.png',
-    appleTouch:  'game/assets/favicon/apple-touch-icon.png',
     goatcounter: 'game/assets/goatcounter/count.js',
   },
 
@@ -35,8 +29,7 @@ export const gameConfig = {
   GRAVITY_RATIO:          0.0008, // для кусков, доля VH за кадр²
   CAMERA_LERP:            0.15,
 
-  PERFECT_TOLERANCE_RATIO: 0.007,  // допуск идеального попадания (доля VW)
-  PERFECT_BONUS_MAX: 5,
+  PERFECT_TOLERANCE_RATIO: 0.008,  // допуск идеального попадания (доля VW)
   SCORE_PER_BLOCK:   1,
   PERFECT_BASE_SCORE:   5,
   PERFECT_STEP_SCORE:   2,
