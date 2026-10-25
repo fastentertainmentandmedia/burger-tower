@@ -76,6 +76,34 @@ export function createRules() {
   let crumbleStart = 0;
   let nowMs = 0;
 
+  // в createRules(), рядом с let nowMs = 0;
+  let smoothDt = 0;
+  const DT_SMOOTH = 0.2;   // 0..1, меньше = плавнее
+
+  function tick(rawDt) {
+    // Сглаживаем dt: 80% старого + 20% нового
+    smoothDt = smoothDt ? smoothDt * (1 - DT_SMOOTH) + rawDt * DT_SMOOTH : rawDt;
+    const dt = smoothDt;
+
+    nowMs += dt;
+
+    if (current && !over) {
+      current.x += direction * speed * (dt / 16.6667);
+      if (direction === 1 && current.x > VW) {
+        current.x = VW;
+        direction = -1;
+      } else if (direction === -1 && current.x + current.width < 0) {
+        current.x = -current.width;
+        direction = 1;
+      }
+    }
+
+    updateFallingPieces();
+    updateEffects(dt);
+    if (!over) updateCamera();
+
+    return { event: null };
+  }
   // Base + extra-bun текущей партии
   let chosenBaseType = null;
   let chosenTopType  = null;
@@ -399,6 +427,7 @@ export function createRules() {
     cameraOffset = 0;
     perfectStreak = 0;
     score = 0;
+    smoothDt = 0;
     speed = cfg.INITIAL_SPEED;
     direction = 1;
     over = false;

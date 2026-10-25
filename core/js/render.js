@@ -53,10 +53,16 @@ export function createRenderer(canvas, callbacks = {}) {
     const rawScale = Math.min(cssW / VW, cssH / VH);
     scale = Math.max(1, Math.round(rawScale * dpr) / dpr);
 
-    offX = (cssW - VW * scale) / 2;
-    offY = cssH - VH * scale;
+    const offXPx = Math.round((cssW - VW * scale) / 2 * dpr);
+    const offYPx = Math.round((cssH - VH * scale) * dpr);
+
+    offX = offXPx / dpr;
+    offY = offYPx / dpr;
+
     refreshColors();
     onImageReady();
+
+    ctx.imageSmoothingEnabled = false;
   }
 
   function applyTransform() {
