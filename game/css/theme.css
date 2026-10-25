@@ -111,6 +111,19 @@ canvas { background-color: var(--color-field-bg); }
   color: var(--color-text-accent);
 }
 
+.hud-streak-label {
+  font-size: 1.15em;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+.hud-streak-value {
+  font-size: 1.15em;
+  font-weight: 900;
+  color: var(--color-timer-warning);
+}
+
 /* ============================================================
    [BLOCK: touch-hint — базовый]
    ============================================================ */

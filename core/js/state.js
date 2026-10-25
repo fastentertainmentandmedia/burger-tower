@@ -5,6 +5,7 @@
 export const state = {
   score: 0,
   bestScore: 0,
+  perfectStreak: 0,
 
   gameActive: false,
   gameStarted: false,
@@ -28,6 +29,7 @@ export function updateState(patch, ui) {
 
 export function resetGameState() {
   state.score = 0;
+  state.perfectStreak = 0;
   state.gameActive = true;
   state.gameStarted = true;
   state.gameOver = false;

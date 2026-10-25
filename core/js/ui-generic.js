@@ -27,6 +27,13 @@ export function createUI({ $, limits, fields = [], timer = null, hints = true })
       if (f.dangerWhen) el.classList.toggle('is-danger', !!f.dangerWhen(state));
     }
 
+    if ($.hudStreakValue) {
+      const streak = state.perfectStreak ?? 0;
+      $.hudStreakValue.textContent = 'x' + streak;
+      const group = $.hudStreakValue.closest('.hud-group');
+      if (group) group.style.display = '';
+    }
+
     if ($.limitBestScore && limits) {
       $.limitBestScore.textContent = limits.getBestScore();
     }

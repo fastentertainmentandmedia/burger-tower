@@ -28,8 +28,6 @@ export function createLoop({ rules, renderer, limits, callbacks }) {
       if (dt < 0) dt = 0;
       if (dt > MAX_DT) dt = MAX_DT;
 
-
-
       rules.tick(dt);
       renderer.render(rules.getState());
 
@@ -61,6 +59,7 @@ export function createLoop({ rules, renderer, limits, callbacks }) {
 
     if (result && (result.event === 'score' || result.event === 'perfect')) {
       callbacks.onScore?.(rules.getScore(), result.event);
+      if (result.event === 'perfect') callbacks.onPerfect?.(rules.getState());
     }
 
     renderer.render(rules.getState());

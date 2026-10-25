@@ -31,6 +31,8 @@ const $ = createDOM({
   hudBestValue:      'hudBestValue',
   hudScoreLabel:     'hudScoreLabel',
   hudScoreValue:     'hudScoreValue',
+  hudStreakValue:    'hudStreakValue',
+  hudStreakLabel:    'hudStreakLabel',
 }, { required: ['canvas', 'container', 'startHint', 'introModal', 'introAccept'] });
 
 const limits = createPlayerLimits(gameConfig, DEBUG_DISABLE_LIMIT);
@@ -56,7 +58,6 @@ const ui = createUI({
 const rules = createRules();
 const renderer = createRenderer($.canvas, { onImageReady: () => game && game.render() });
 
-// Начальные размеры
 rules.setFieldSize($.canvas.clientWidth || 360, $.canvas.clientHeight || 600);
 
 function syncState(extraPatch) {
@@ -71,13 +72,25 @@ const game = createLoop({
   renderer,
   limits,
   callbacks: {
-    onScore: (score) => { syncState({ score }); },
-    onPerfect: () => { trackGoal('perfect_hit'); },
+    onScore: (score, event) => {
+      console.log('onScore', score, event);
+      if (event === 'score') {
+        syncState({ score, perfectStreak: 0 });
+      } else {
+        syncState({ score });
+      }
+    },
+    onPerfect: (snap) => {
+      console.log('onPerfect', snap?.perfectStreak);
+      trackGoal('perfect_hit', { streak: snap?.perfectStreak ?? 0 });
+      syncState({ perfectStreak: snap?.perfectStreak ?? 0 });
+    },
     onStart: () => {
       gamesThisSession++;
       trackGoal('game_start', { number: gamesThisSession });
       syncState({
         gameStarted: true, gameActive: true, gameOver: false, hintVisible: false,
+        perfectStreak: 0,
       });
     },
     onGameOver: ({ win, score }) => {
@@ -85,6 +98,7 @@ const game = createLoop({
       trackGoal('game_over', { score, win: win ? 1 : 0, number: gamesThisSession });
       syncState({
         gameActive: false, gameStarted: true, gameOver: true, win: !!win,
+        perfectStreak: 0,
         ...(isNewRecord ? { bestScore: score } : {}),
       });
     },
@@ -93,6 +107,7 @@ const game = createLoop({
       trackGoal('daily_limit_reached', { score, number: gamesThisSession });
       syncState({
         limitReached: true, hintVisible: true, hintKind: 'limit',
+        perfectStreak: 0,
         ...(isNewRecord ? { bestScore: score } : {}),
       });
     },

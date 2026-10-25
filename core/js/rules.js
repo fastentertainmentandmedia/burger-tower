@@ -252,7 +252,7 @@ export function createRules() {
     current = null;
   }
 
-  function triggerPerfectEffects(cx, cy, w) {
+  function triggerPerfectEffects(cx, cy, w, gain) {
     effects.push({ type: 'ring', x: cx, y: cy, r: 4, maxR: Math.max(38, w * 0.7), life: 0, duration: 380, color: 'perfectRing' });
     effects.push({ type: 'ring', x: cx, y: cy, r: 2, maxR: Math.max(60, w * 1.0), life: 0, duration: 520, color: 'perfectRing' });
     for (let i = 0; i < 10; i++) {
@@ -265,11 +265,10 @@ export function createRules() {
         life: 0, duration: 420 + Math.random() * 200, color: 'spark',
       });
     }
+    const label = perfectStreak > 1 ? `PERFECT x${perfectStreak}!` : 'PERFECT!';
     effects.push({
       type: 'text', x: cx, y: cy - 8, life: 0, duration: 900,
-      text: perfectStreak + 1 > 1
-        ? `+${Math.min(1 + perfectStreak, cfg.PERFECT_BONUS_MAX)} PERFECT!`
-        : 'PERFECT!',
+      text: `${label} +${gain}`,
       color: 'perfectText', stroke: 'perfectStroke',
     });
     effects.push({ type: 'glow', x: cx, y: cy, w, life: 0, duration: 300, color: 'perfectGlow' });
@@ -337,10 +336,15 @@ export function createRules() {
     let event = 'score';
 
     if (isPerfect) {
-      triggerPerfectEffects(finalX + finalW / 2, topY - h / 2, finalW);
       perfectStreak++;
-      const bonus = Math.min(1 + perfectStreak - 1, cfg.PERFECT_BONUS_MAX);
-      score += bonus;
+
+      const base = cfg.PERFECT_BASE_SCORE ?? 5;
+      const step = cfg.PERFECT_STEP_SCORE ?? 2;
+      const heightMult = 1 + (blocks.length * (cfg.PERFECT_HEIGHT_BONUS ?? 0.02));
+      const gain = Math.round((base + step * perfectStreak * perfectStreak) * heightMult);
+
+      triggerPerfectEffects(finalX + finalW / 2, topY - h / 2, finalW, gain);
+      score += gain;
       event = 'perfect';
     } else {
       perfectStreak = 0;

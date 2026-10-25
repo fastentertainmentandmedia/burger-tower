@@ -29,7 +29,7 @@ export const gameConfig = {
   TOP_MARGIN_RATIO:       0.18,   // верхняя граница камеры (18% VH)
 
   INITIAL_SPEED_RATIO:    0.006,  // скорость за кадр, доля VW (≈2.3 px на 390)
-  SPEED_INCREMENT_RATIO:  0.0002, // прирост за блок
+  SPEED_INCREMENT_RATIO:  0.00015, // прирост за блок
   MAX_SPEED_RATIO:        0.014,  // потолок (≈5.5 px на 390)
 
   GRAVITY_RATIO:          0.0008, // для кусков, доля VH за кадр²
@@ -38,6 +38,9 @@ export const gameConfig = {
   PERFECT_TOLERANCE_RATIO: 0.007,  // допуск идеального попадания (доля VW)
   PERFECT_BONUS_MAX: 5,
   SCORE_PER_BLOCK:   1,
+  PERFECT_BASE_SCORE:   5,
+  PERFECT_STEP_SCORE:   2,
+  PERFECT_HEIGHT_BONUS: 0.02,
 
   // ----------------------------------------------------------
   // Base-типы (основания) + extra-bun
