@@ -73,8 +73,19 @@ canvas { background-color: var(--color-field-bg); }
    ============================================================ */
 
 @media (max-width: 420px) {
-  .hud-best-label, .hud-score-label, .hud-streak-label { font-size: 0.9em; }
-  .hud-best-value, .hud-score-value, .hud-streak-value { font-size: 0.95em; }
+  .hud-best-label, .hud-score-label, .hud-streak-label,
+  .hud-best-value, .hud-score-value, .hud-streak-value {
+    font-size: 0.85em;
+  }
+  .hud-timer {
+    font-size: 0.95em;
+  }
+  .hud-right {
+    gap: 0.6em;
+  }
+  .hud-top {
+    gap: 3%;
+  }
 }
 
 .hud-layer {
