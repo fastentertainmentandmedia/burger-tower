@@ -73,7 +73,6 @@ const game = createLoop({
   limits,
   callbacks: {
     onScore: (score, event) => {
-      console.log('onScore', score, event);
       if (event === 'score') {
         syncState({ score, perfectStreak: 0 });
       } else {
@@ -183,4 +182,13 @@ createLifecycle({
 
 $.canvas.addEventListener('contextmenu', e => e.preventDefault());
 
-document.documentElement.classList.add('ready');
+function hidePreloader() {
+  document.documentElement.classList.add('ready');
+}
+
+if (document.readyState === 'complete') {
+  hidePreloader();
+} else {
+  window.addEventListener('load', hidePreloader, { once: true });
+  setTimeout(hidePreloader, 10000);
+}

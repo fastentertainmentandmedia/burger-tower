@@ -68,6 +68,8 @@ body {
 
 canvas { background-color: var(--color-field-bg); }
 
+
+
 /* ============================================================
    [BLOCK: hud]
    ============================================================ */
@@ -75,7 +77,7 @@ canvas { background-color: var(--color-field-bg); }
 @media (max-width: 420px) {
   .hud-best-label, .hud-score-label, .hud-streak-label,
   .hud-best-value, .hud-score-value, .hud-streak-value {
-    font-size: 0.85em;
+    font-size: 0.75em;
   }
   .hud-timer {
     font-size: 0.95em;
