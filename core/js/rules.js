@@ -78,7 +78,7 @@ export function createRules() {
 
   // в createRules(), рядом с let nowMs = 0;
   let smoothDt = 0;
-  const DT_SMOOTH = 0.2;   // 0..1, меньше = плавнее
+  const DT_SMOOTH = 0.3;   // 0..1, меньше = плавнее
 
   function tick(rawDt) {
     smoothDt = smoothDt ? smoothDt * (1 - DT_SMOOTH) + rawDt * DT_SMOOTH : rawDt;

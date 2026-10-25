@@ -32,15 +32,7 @@
            Z"
         fill="#E1BEE7" opacity="0.6"/>
 
-  <!-- Purple streaks through the onion flesh -->
-  <g stroke="#AB47BC" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.55">
-    <path d="M95 93 Q130 97 165 93"/>
-    <path d="M180 96 Q215 100 250 96"/>
-    <path d="M265 93 Q295 97 325 93"/>
-    <path d="M95 103 Q130 99 165 103"/>
-    <path d="M180 100 Q215 96 250 100"/>
-    <path d="M265 103 Q295 99 325 103"/>
-  </g>
+
 
   <!-- Glossy top highlight -->
   <path d="M80 86 Q200 80 320 86" fill="none" stroke="#F8E1FF" stroke-width="2.5" opacity="0.7" stroke-linecap="round"/>

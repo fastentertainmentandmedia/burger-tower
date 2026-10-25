@@ -26,9 +26,9 @@ export const gameConfig = {
   PLATE_Y_OFFSET:   20,
   TOP_MARGIN:       300, //140
 
-  INITIAL_SPEED:    2.9,
-  SPEED_INCREMENT:  0.065,
-  MAX_SPEED:        8.0,
+  INITIAL_SPEED:    2.2,
+  SPEED_INCREMENT:  0.10,
+  MAX_SPEED:        6.5,
   GRAVITY:          0.65,
   CAMERA_LERP:      0.15, //0.15
 

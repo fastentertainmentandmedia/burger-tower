@@ -24,22 +24,8 @@
   <!-- Pickle rind highlight -->
   <path d="M68 90 L332 90" fill="none" stroke="#9CCC65" stroke-width="1.8" opacity="0.5" stroke-linecap="round"/>
 
-  <!-- Subtle curved stripes -->
-  <g stroke="#689F38" stroke-width="1.4" stroke-linecap="round" opacity="0.32" fill="none">
-    <path d="M100 96 Q140 93 180 96"/>
-    <path d="M190 97 Q230 94 270 97"/>
-    <path d="M280 97 Q300 95 315 97"/>
-  </g>
 
-  <!-- Ridged top edge detail -->
-  <g stroke="#558B2F" stroke-width="1.4" stroke-linecap="round" opacity="0.4" fill="none">
-    <path d="M100 90 Q105 88 110 90"/>
-    <path d="M140 90 Q145 88 150 90"/>
-    <path d="M180 90 Q185 88 190 90"/>
-    <path d="M220 90 Q225 88 230 90"/>
-    <path d="M260 90 Q265 88 270 90"/>
-    <path d="M300 90 Q305 88 310 90"/>
-  </g>
+
 
   <!-- Bottom shadow edge -->
   <path d="M68 104 L332 104" fill="none" stroke="#2E7D32" stroke-width="1.6" opacity="0.4" stroke-linecap="round"/>

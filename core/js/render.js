@@ -56,8 +56,8 @@ export function createRenderer(canvas, callbacks = {}) {
     scale   = rawScale;               // дробный — сцена ровно по контейнеру
     scalePx = scale * dpr;            // дробный (используется в applyTransform)
 
-    offXPx = (cssW * dpr - VW * scalePx) / 2;
-    offYPx = cssH * dpr - VH * scalePx;
+    offYPx = Math.round(cssH * dpr - VH * scalePx);
+    offXPx = Math.round((cssW * dpr - VW * scalePx) / 2);
 
     refreshColors();
     onImageReady();
@@ -86,9 +86,8 @@ export function createRenderer(canvas, callbacks = {}) {
   }
 
   function drawIngredientAt(x, y, w, h, type) {
-    // Округление до целых пикселей — убирает субпиксельную тряску
-    x = Math.round(x);
-    y = Math.round(y);
+    // x, y — БЕЗ округления (плавное субпиксельное движение)
+    // w, h — округляем (стабильный размер)
     w = Math.round(w);
     h = Math.round(h);
 
@@ -114,18 +113,18 @@ export function createRenderer(canvas, callbacks = {}) {
         dh = innerH * spec.scale;
       }
 
-      // Тоже округляем позицию и размеры картинки — чтобы drawImage не «мылил»
-      const dx = Math.round(x + (w - dw) / 2);
-      const dy = Math.round(y + (h - dh) / 2);
-      const dW = Math.round(dw);
-      const dH = Math.round(dh);
+      // Позиция картинки — не округляем (плавное движение)
+      // Размеры — не округляем (пропорции точнее)
+      const dx = x + (w - dw) / 2;
+      const dy = y + (h - dh) / 2;
 
       ctx.save();
       ctx.beginPath();
+      // Клип по блоку — тоже без округления, чтобы совпадал с картинкой
       ctx.rect(x, y, w, h);
       ctx.clip();
 
-      ctx.drawImage(entry.img, dx, dy, dW, dH);
+      ctx.drawImage(entry.img, dx, dy, dw, dh);
 
       ctx.restore();
       return;
