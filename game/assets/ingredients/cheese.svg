@@ -8,7 +8,7 @@
            L80 118
            Q55 118 55 100
            Z"
-        fill="#F9A825" stroke="#E65100" stroke-width="2.5"/>
+        fill="#F9A825" stroke="#E65100" stroke-width="2"/>
 
   <!-- Cheese inner body -->
   <path d="M68 100
@@ -19,7 +19,7 @@
            L88 112
            Q68 112 68 100
            Z"
-        fill="#FFD54F" stroke="#F9A825" stroke-width="1.5"/>
+        fill="#FFD54F" stroke="#F9A825" stroke-width="1"/>
 
   <!-- Soft melted core highlight -->
   <path d="M90 100
@@ -30,14 +30,14 @@
            L110 108
            Q90 108 90 100
            Z"
-        fill="#FFE082" opacity="0.55"/>
+        fill="#FFDB6B"/>
 
   <!-- Glossy top highlight -->
-  <path d="M80 86 Q200 80 320 86" fill="none" stroke="#FFF3C4" stroke-width="2.5" opacity="0.65" stroke-linecap="round"/>
+  <path d="M80 86 Q200 80 320 86" fill="none" stroke="#FFE89B" stroke-width="2"/>
 
   <!-- Soft specular highlight -->
-  <ellipse cx="130" cy="88" rx="20" ry="3" fill="#FFF8E1" opacity="0.5"/>
+  <ellipse cx="130" cy="88" rx="20" ry="3" fill="#FFE698"/>
 
   <!-- Bottom shadow edge -->
-  <path d="M80 114 L320 114" fill="none" stroke="#BF360C" stroke-width="1.8" opacity="0.35" stroke-linecap="round"/>
+  <path d="M80 114 L320 114" fill="none" stroke="#E99D38" stroke-width="1"/>
 </svg>

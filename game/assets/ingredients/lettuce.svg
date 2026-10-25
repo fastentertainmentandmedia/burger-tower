@@ -9,7 +9,7 @@
            Q44 110 44 106
            L44 86
            Q44 82 48 82 Z" 
-        fill="#4CAF50" stroke="#2E7D32" stroke-width="2.5" stroke-linejoin="round"/>
+        fill="#4CAF50" stroke="#2E7D32" stroke-width="2" stroke-linejoin="round"/>
         
   <!-- Internal light band (wavy center) -->
   <path d="M44 88

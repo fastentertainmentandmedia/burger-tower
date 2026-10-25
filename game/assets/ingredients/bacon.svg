@@ -9,7 +9,7 @@
            Q44 110 44 106
            L44 86
            Q44 82 48 82 Z" 
-        fill="#E55050" stroke="#A52A2A" stroke-width="2.5" stroke-linejoin="round"/>
+        fill="#E55050" stroke="#A52A2A" stroke-width="2" stroke-linejoin="round"/>
         
   <!-- Internal fat band (meat on top and bottom) -->
   <path d="M44 88

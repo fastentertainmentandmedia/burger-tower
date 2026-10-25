@@ -9,7 +9,7 @@
            L345 96
            Q345 88 338 88
            Z"
-        fill="#2A2A2A" stroke="#111111" stroke-width="2.5" stroke-linejoin="round"/>
+        fill="#2A2A2A" stroke="#111111" stroke-width="2" stroke-linejoin="round"/>
 
   <!-- Integrated side shading -->
   <path d="M56.5 96
@@ -20,7 +20,7 @@
            L62 89.5
            Q56.5 89.5 56.5 96
            Z"
-        fill="#000000" opacity="0.35"/>
+        fill="#171717"/>
         
   <path d="M343.5 96
            L343.5 112
@@ -30,19 +30,19 @@
            L338 89.5
            Q343.5 89.5 343.5 96
            Z"
-        fill="#000000" opacity="0.35"/>
+        fill="#171717"/>
 
   <!-- Bun top highlight (muted gray) -->
-  <path d="M80 94 Q200 91 320 94" fill="none" stroke="#555555" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+  <path d="M80 94 Q200 91 320 94" fill="none" stroke="#444444" stroke-width="2"/>
 
   <!-- Soft specular highlight -->
-  <ellipse cx="140" cy="96" rx="22" ry="3" fill="#888888" opacity="0.2"/>
+  <ellipse cx="140" cy="96" rx="22" ry="3" fill="#3D3D3D"/>
 
   <!-- Bottom shadow edge -->
-  <path d="M80 114 Q200 117 320 114" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.5" stroke-linecap="round"/>
-  
+  <path d="M80 114 Q200 117 320 114" fill="none" stroke="#151515" stroke-width="1"/>
+
   <!-- Bran flecks / multigrain texture (darker gray) -->
-  <g fill="#555555" opacity="0.7">
+  <g fill="#494949">
     <rect x="105" y="102" width="3" height="1.5" rx="0.5" transform="rotate(15 105 102)"/>
     <rect x="140" y="108" width="4" height="1.5" rx="0.5" transform="rotate(-20 140 108)"/>
     <rect x="175" y="98" width="3" height="1.5" rx="0.5" transform="rotate(30 175 98)"/>
@@ -62,7 +62,7 @@
   </g>
 
   <!-- Lighter flecks for depth (soft silver/gray) -->
-  <g fill="#888888" opacity="0.4">
+  <g fill="#515151">
     <circle cx="115" cy="105" r="1"/>
     <circle cx="165" cy="112" r="1.2"/>
     <circle cx="205" cy="102" r="1"/>

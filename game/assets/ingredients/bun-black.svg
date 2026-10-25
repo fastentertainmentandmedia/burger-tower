@@ -8,20 +8,20 @@
            L90 125
            Q60 120 60 95
            Z"
-        fill="#1A1A1A" stroke="#000000" stroke-width="2.5"/>
+        fill="#1A1A1A" stroke="#000000" stroke-width="2"/>
 
   <!-- Bun top highlight (warm dark gray) -->
   <path d="M90 95 Q200 88 310 95"
-        fill="none" stroke="#4A4A4A" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+        fill="none" stroke="#373737" stroke-width="2"/>
 
   <!-- Soft specular highlight -->
-  <ellipse cx="140" cy="96" rx="22" ry="4" fill="#666666" opacity="0.3"/>
+  <ellipse cx="140" cy="96" rx="22" ry="4" fill="#313131"/>
 
   <!-- Bottom shadow edge -->
-  <path d="M90 120 L310 120" fill="none" stroke="#000000" stroke-width="1.8" opacity="0.6" stroke-linecap="round"/>
-  
+  <path d="M90 120 L310 120" fill="none" stroke="#0A0A0A" stroke-width="1"/>
+
   <!-- Subtle speckles for a charred/baked texture -->
-  <g fill="#333333" opacity="0.4">
+  <g fill="#242424">
     <circle cx="110" cy="105" r="1.5"/>
     <circle cx="145" cy="112" r="1.2"/>
     <circle cx="180" cy="100" r="1.8"/>

@@ -8,15 +8,15 @@
            L90 125
            Q60 120 60 95
            Z"
-        fill="#D4953A" stroke="#B87830" stroke-width="2.5"/>
+        fill="#D4953A" stroke="#B87830" stroke-width="2"/>
 
   <!-- Bun top highlight -->
   <path d="M90 95 Q200 88 310 95"
-        fill="none" stroke="#E8B05A" stroke-width="3" opacity="0.55" stroke-linecap="round"/>
+        fill="none" stroke="#DFA44C" stroke-width="2"/>
 
   <!-- Soft specular highlight -->
-  <ellipse cx="140" cy="96" rx="22" ry="4" fill="#F5DEB3" opacity="0.35"/>
+  <ellipse cx="140" cy="96" rx="22" ry="4" fill="#E4B874"/>
 
   <!-- Bottom shadow edge -->
-  <path d="M90 120 L310 120" fill="none" stroke="#8D5A1E" stroke-width="1.8" opacity="0.35" stroke-linecap="round"/>
+  <path d="M90 120 L310 120" fill="none" stroke="#BB8030" stroke-width="1"/>
 </svg>

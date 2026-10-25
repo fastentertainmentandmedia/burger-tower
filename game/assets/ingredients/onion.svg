@@ -8,7 +8,7 @@
            L80 118
            Q55 118 55 100
            Z"
-        fill="#CE93D8" stroke="#8E24AA" stroke-width="2.5"/>
+        fill="#CE93D8" stroke="#8E24AA" stroke-width="2"/>
 
   <!-- Onion inner flesh -->
   <path d="M68 100
@@ -19,7 +19,7 @@
            L88 112
            Q68 112 68 100
            Z"
-        fill="#F3E5F5" stroke="#AB47BC" stroke-width="1.5"/>
+        fill="#F3E5F5" stroke="#AB47BC" stroke-width="1"/>
 
   <!-- Onion core / center hole suggestion -->
   <path d="M90 100
@@ -30,16 +30,14 @@
            L110 108
            Q90 108 90 100
            Z"
-        fill="#E1BEE7" opacity="0.6"/>
-
-
+        fill="#EDD5F0"/>
 
   <!-- Glossy top highlight -->
-  <path d="M80 86 Q200 80 320 86" fill="none" stroke="#F8E1FF" stroke-width="2.5" opacity="0.7" stroke-linecap="round"/>
+  <path d="M80 86 Q200 80 320 86" fill="none" stroke="#F6DFF8" stroke-width="2"/>
 
   <!-- Soft specular highlight -->
-  <ellipse cx="130" cy="88" rx="20" ry="3" fill="#FFFFFF" opacity="0.5"/>
+  <ellipse cx="130" cy="88" rx="20" ry="3" fill="#F9F1FA"/>
 
   <!-- Bottom shadow edge -->
-  <path d="M80 114 L320 114" fill="none" stroke="#4A148C" stroke-width="1.8" opacity="0.35" stroke-linecap="round"/>
+  <path d="M80 114 L320 114" fill="none" stroke="#B27EAF" stroke-width="1"/>
 </svg>

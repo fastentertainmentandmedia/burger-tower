@@ -12,21 +12,18 @@
            Q56 92 60 90
            Q62 88 68 88
            Z"
-        fill="#7CB342" stroke="#33691E" stroke-width="2.5" stroke-linejoin="round"/>
+        fill="#7CB342" stroke="#33691E" stroke-width="2" stroke-linejoin="round"/>
 
   <!-- Pale pickle center -->
   <path d="M90 98
            Q200 95 310 98
            Q200 102 90 98
            Z"
-        fill="#AED581" opacity="0.55"/>
+        fill="#98C665"/>
 
   <!-- Pickle rind highlight -->
-  <path d="M68 90 L332 90" fill="none" stroke="#9CCC65" stroke-width="1.8" opacity="0.5" stroke-linecap="round"/>
-
-
-
+  <path d="M68 90 L332 90" fill="none" stroke="#8CC054" stroke-width="2"/>
 
   <!-- Bottom shadow edge -->
-  <path d="M68 104 L332 104" fill="none" stroke="#2E7D32" stroke-width="1.6" opacity="0.4" stroke-linecap="round"/>
+  <path d="M68 104 L332 104" fill="none" stroke="#5D9D3C" stroke-width="1"/>
 </svg>
