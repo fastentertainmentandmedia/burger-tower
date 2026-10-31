@@ -1,8 +1,14 @@
 // ============================================================
 // [FILE: core/js/analytics.js]
+// Обёртка над Яндекс.Метрикой и GoatCounter.
+// Автоматически добавляет название игры (document.title).
+// Client (?ref=) устанавливается как параметр визита Метрики.
+// Экспортирует: trackGoal, getClient, setCounterId, setClient
 // ============================================================
 
-const COUNTER_ID = 113332587;
+let COUNTER_ID = null;
+let CLIENT = null;
+let clientApplied = false;
 
 const ymQueue = [];
 const gcQueue = [];
@@ -13,6 +19,7 @@ let gcReady = false;
 const checkInterval = setInterval(() => {
   if (!ymReady && typeof window.ym === 'function') {
     ymReady = true;
+    applyClientToYm();
     flushYmQueue();
   }
   if (!gcReady && window.goatcounter && typeof window.goatcounter.count === 'function') {
@@ -22,13 +29,73 @@ const checkInterval = setInterval(() => {
   if (ymReady && gcReady) clearInterval(checkInterval);
 }, 500);
 
+
+// ============================================================
+// [BLOCK: setCounterId]
+// ============================================================
+export function setCounterId(id) {
+  const num = Number(id);
+  if (Number.isFinite(num) && num > 0) {
+    COUNTER_ID = num;
+  }
+}
+
+
+// ============================================================
+// [BLOCK: setClient]
+// ============================================================
+export function setClient(client) {
+  if (!client || client === 'direct') return;
+  CLIENT = client;
+  if (ymReady) applyClientToYm();
+}
+
+function applyClientToYm() {
+  if (clientApplied) return;
+  if (!COUNTER_ID || !CLIENT) return;
+  if (typeof window.ym !== 'function') return;
+
+  try {
+    window.ym(COUNTER_ID, 'params', { client: CLIENT });
+    clientApplied = true;
+  } catch (e) {}
+}
+
+
+// ============================================================
+// [BLOCK: game-id]
+// ============================================================
+function getGameTitle() {
+  return (document.title || 'unknown').trim();
+}
+
+function getGameSlug() {
+  return getGameTitle()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    || 'unknown';
+}
+
+
+// ============================================================
+// [BLOCK: senders]
+// ============================================================
 function sendToYm(goal, params) {
-  try { window.ym(COUNTER_ID, 'reachGoal', goal, params); } catch (e) {}
+  if (!COUNTER_ID) return;
+  applyClientToYm();
+
+  try {
+    window.ym(COUNTER_ID, 'reachGoal', goal, {
+      game: getGameTitle(),
+      ...params,
+    });
+  } catch (e) {}
 }
 
 function sendToGoatCounter(goal, params) {
   try {
-    const parts = [];
+    const parts = [getGameSlug()];
     if (params?.client) parts.push(params.client);
     parts.push(goal);
     if (params?.score !== undefined) parts.push('score-' + params.score);
@@ -55,6 +122,10 @@ function flushGcQueue() {
   gcQueue.length = 0;
 }
 
+
+// ============================================================
+// [BLOCK: trackGoal]
+// ============================================================
 export function trackGoal(goal, params) {
   if (ymReady) sendToYm(goal, params);
   else ymQueue.push([goal, params]);
@@ -63,6 +134,10 @@ export function trackGoal(goal, params) {
   else gcQueue.push([goal, params]);
 }
 
+
+// ============================================================
+// [BLOCK: getClient]
+// ============================================================
 export function getClient() {
   try {
     const params = new URLSearchParams(location.search);
