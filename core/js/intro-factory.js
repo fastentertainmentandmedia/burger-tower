@@ -33,12 +33,24 @@ export function createIntro({ $, gameConfig, onAccept }) {
   }
 
   function init() {
-    if (alreadyAccepted) {
+    // Флаг "вернулся с privacy.html" — принудительно показать модалку
+    let forceReopen = false;
+    try {
+      forceReopen = sessionStorage.getItem('reopenIntro') === '1';
+      if (forceReopen) {
+        sessionStorage.removeItem('reopenIntro');
+      }
+    } catch (e) {
+      forceReopen = false;
+    }
+
+    if (alreadyAccepted && !forceReopen) {
       modal.classList.add('hidden');
       modal.style.display = 'none';
       onAccept();
       return;
     }
+
     modal.classList.remove('hidden');
     modal.style.display = '';
     acceptBtn.addEventListener('click', accept);
